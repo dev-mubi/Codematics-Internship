@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Task 1 - 26 January 2026</title>
+
+    <style>
+      body {
+        padding: 80px;
+      }
+
+      header,
+      nav,
+      footer,
+      aside,
+      section {
+        background-color: lightgray;
+        text-align: center; /* Has no effect on aside and section because they use flex props to center text */
+      }
+
+      header,
+      nav,
+      footer {
+        padding: 25px;
+        margin-bottom: 12px;
+      }
+
+      main {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 12px;
+      }
+
+      aside {
+        width: 20%;
+        height: 220px;
+        display: flex; /* I used flex to center the text vertically and horizontally */
+        align-items: center;
+        justify-content: center;
+      }
+
+      section {
+        width: 60%;
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>Header</header>
+
+    <nav>Navigation Menu</nav>
+
+    <main>
+      <!-- No use of divs as required-->
+      <aside>Content</aside>
+      <section>Main Content</section>
+      <aside>Content</aside>
+    </main>
+
+    <footer>Footer</footer>
+  </body>
+</html>
