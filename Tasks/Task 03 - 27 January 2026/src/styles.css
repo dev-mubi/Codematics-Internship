@@ -60,6 +60,7 @@ body {
 
 .deadline {
   font-size: 28px;
+  font-weight: bolder;
   color: #0a0a0a;
   line-height: 1.4;
 }
