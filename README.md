@@ -7,9 +7,12 @@ Each task is placed in its own folder and includes a separate README file explai
 
 ---
 
+## Repository Structure
+
 - Each task folder contains:
   - Task-related source files
   - A README explaining the task requirements and implementation
+  - Assets (images, screenshots) where required
 
 ---
 
@@ -17,6 +20,9 @@ Each task is placed in its own folder and includes a separate README file explai
 
 - **Task 01**: Basic web page layout using semantic HTML  
   Focused on structure, layout, and pixel alignment without using `<div>` tags.
+
+- **Task 02**: Landing page layout using images  
+  Focused on recreating a given design using HTML and CSS, proper image usage, layout alignment, and maintaining folder structure with external assets.
 
 More tasks will be added as the internship progresses.
 
@@ -34,7 +40,8 @@ More tasks will be added as the internship progresses.
 ## Notes
 
 - All tasks are implemented according to the instructions provided during the internship.
-- Each task README contains specific details related to that task.
+- Tasks are organized in separate folders for clarity and scalability.
+- Each task README contains task-specific setup instructions and explanations.
 
 ---
 
