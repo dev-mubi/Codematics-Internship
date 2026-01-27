@@ -12,7 +12,7 @@ Each task is placed in its own folder and includes a separate README file explai
 - Each task folder contains:
   - Task-related source files
   - A README explaining the task requirements and implementation
-  - Assets (images, screenshots) where required
+  - Assets (images, icons, screenshots) where required
 
 ---
 
@@ -23,6 +23,9 @@ Each task is placed in its own folder and includes a separate README file explai
 
 - **Task 02**: Landing page layout using images  
   Focused on recreating a given design using HTML and CSS, proper image usage, layout alignment, and maintaining folder structure with external assets.
+
+- **Task 03**: Submission form layout  
+  Focused on building a form-based layout using HTML and CSS, styling inputs and form elements, using provided images, and matching the given design as closely as possible.
 
 More tasks will be added as the internship progresses.
 
