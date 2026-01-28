@@ -27,6 +27,9 @@ Each task is placed in its own folder and includes a separate README file explai
 - **Task 03**: Submission form layout  
   Focused on building a form-based layout using HTML and CSS, styling inputs and form elements, using provided images, and matching the given design as closely as possible.
 
+- **Task 04**: Landing page with diagonal cut design  
+  Focused on creating a pixel-perfect landing page using CSS `clip-path` for diagonal cut sections, grid layouts for multiple club sections, proper image asset usage, and clean code organization.
+
 More tasks will be added as the internship progresses.
 
 ---
