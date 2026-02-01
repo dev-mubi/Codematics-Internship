@@ -30,6 +30,9 @@ Each task is placed in its own folder and includes a separate README file explai
 - **Task 04**: Landing page with diagonal cut design  
   Focused on creating a pixel-perfect landing page using CSS `clip-path` for diagonal cut sections, grid layouts for multiple club sections, proper image asset usage, and clean code organization.
 
+- **Task 05**: Keefer Law Firm Website Replica  
+  Focused on building a pixel-perfect responsive website using both **Tailwind CSS** and **Pure HTML/CSS**. Key features include two-tone serif headings, textured backgrounds and mobile-first responsive design.
+
 More tasks will be added as the internship progresses.
 
 ---
@@ -38,6 +41,7 @@ More tasks will be added as the internship progresses.
 
 - HTML5
 - CSS3
+- Tailwind CSS
 - VS Code
 - Git & GitHub
 
@@ -52,5 +56,3 @@ More tasks will be added as the internship progresses.
 ---
 
 ## Author
-
-**Mubashir Shahzaib**
