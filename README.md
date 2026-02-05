@@ -33,6 +33,9 @@ Each task is placed in its own folder and includes a separate README file explai
 - **Task 05**: Keefer Law Firm Website Replica  
   Focused on building a pixel-perfect responsive website using both **Tailwind CSS** and **Pure HTML/CSS**. Key features include two-tone serif headings, textured backgrounds and mobile-first responsive design.
 
+- **Task 06**: Portfolio Website with Dark Mode  
+  Focused on building a modern, responsive portfolio website using **HTML5, Tailwind CSS (CDN), and JavaScript**. Features include a fully functional dark mode with localStorage persistence, mobile-first responsive design, sticky navigation, skills grid, project showcase, testimonials, and contact sections.
+
 More tasks will be added as the internship progresses.
 
 ---
@@ -42,6 +45,7 @@ More tasks will be added as the internship progresses.
 - HTML5
 - CSS3
 - Tailwind CSS
+- JavaScript
 - VS Code
 - Git & GitHub
 
@@ -56,3 +60,5 @@ More tasks will be added as the internship progresses.
 ---
 
 ## Author
+
+**Mubashir Shahzaib**
