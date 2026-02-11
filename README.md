@@ -36,6 +36,9 @@ Each task is placed in its own folder and includes a separate README file explai
 - **Task 06**: Portfolio Website with Dark Mode  
   Focused on building a modern, responsive portfolio website using **HTML5, Tailwind CSS (CDN), and JavaScript**. Features include a fully functional dark mode with localStorage persistence, mobile-first responsive design, sticky navigation, skills grid, project showcase, testimonials, and contact sections.
 
+- **Task 07**: Utility Tools Web Application  
+  Focused on building a single-page utility application with seven different tools including converters, calculators, and data manipulators. Uses vanilla JavaScript with simple, clean logic and professional minimal styling.
+
 More tasks will be added as the internship progresses.
 
 ---

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 07 - Utility Tools</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Task 07 - Utility Tools</h1>
+        <p>Select a task from the menu below</p>
+      </header>
+
+      <div class="menu">
+        <button class="menu-btn active" data-task="1">
+          Task 1: Age to Days
+        </button>
+        <button class="menu-btn" data-task="2">Task 2: Hours to Seconds</button>
+        <button class="menu-btn" data-task="3">Task 3: Find Next Number</button>
+        <button class="menu-btn" data-task="4">Task 4: Capitalize Name</button>
+        <button class="menu-btn" data-task="5">Task 5: BMI Calculator</button>
+        <button class="menu-btn" data-task="6">Task 6: Array Elements</button>
+        <button class="menu-btn" data-task="7">Task 7: Smart Addition</button>
+      </div>
+
+      <div class="content">
+        <!-- Task 1: Age to Days -->
+        <div class="task active" id="task-1">
+          <h2>Task 1: Age to Days Converter</h2>
+          <p class="task-description">
+            Enter your birth date to calculate the number of days lived.
+          </p>
+          <div class="task-group">
+            <label for="age-input">Birth Date:</label>
+            <input type="date" id="age-input" />
+          </div>
+          <button class="btn" onclick="convertAgeToDays()">Convert</button>
+          <div class="result" id="age-result" style="display: none">
+            <div class="result-label">Days Lived:</div>
+            <div class="result-value" id="age-result-value"></div>
+          </div>
+        </div>
+
+        <!-- Task 2: Hours to Seconds -->
+        <div class="task" id="task-2">
+          <h2>Task 2: Hours to Seconds Converter</h2>
+          <p class="task-description">
+            Enter the number of hours to convert to seconds.
+          </p>
+          <div class="task-group">
+            <label for="hours-input">Hours:</label>
+            <input
+              type="number"
+              id="hours-input"
+              placeholder="Enter hours"
+              min="0"
+              step="0.01"
+            />
+          </div>
+          <button class="btn" onclick="convertHoursToSeconds()">Convert</button>
+          <div class="result" id="hours-result" style="display: none">
+            <div class="result-label">Seconds:</div>
+            <div class="result-value" id="hours-result-value"></div>
+          </div>
+        </div>
+
+        <!-- Task 3: Find Next Number -->
+        <div class="task" id="task-3">
+          <h2>Task 3: Find Next Number</h2>
+          <p class="task-description">
+            Select a scenario to find the next number.
+          </p>
+
+          <div style="margin-bottom: 20px">
+            <button
+              class="scenario-btn active"
+              onclick="switchScenario(1, this)"
+            >
+              Scenario 1: Array
+            </button>
+            <button class="scenario-btn" onclick="switchScenario(2, this)">
+              Scenario 2: Single Value
+            </button>
+          </div>
+
+          <!-- Scenario 1: Array -->
+          <div id="scenario-1" class="scenario-content">
+            <div class="task-group">
+              <label for="array-input">Enter numbers (comma-separated):</label>
+              <input
+                type="text"
+                id="array-input"
+                placeholder="e.g., 1, 5, 3, 8, 2"
+              />
+            </div>
+            <div class="task-group">
+              <label for="target-number">Target number:</label>
+              <input
+                type="number"
+                id="target-number"
+                placeholder="e.g., 5"
+                step="any"
+              />
+            </div>
+            <button class="btn" onclick="findNextInArray()">Find Next</button>
+            <div class="result" id="array-result" style="display: none">
+              <div class="result-label">Next Number:</div>
+              <div class="result-value" id="array-result-value"></div>
+            </div>
+          </div>
+
+          <!-- Scenario 2: Single Input -->
+          <div id="scenario-2" class="scenario-content" style="display: none">
+            <div class="task-group">
+              <label for="single-number">Enter a number:</label>
+              <input
+                type="number"
+                id="single-number"
+                placeholder="e.g., 5.5"
+                step="any"
+              />
+            </div>
+            <button class="btn" onclick="findNextSingle()">Find Next</button>
+            <div class="result" id="single-result" style="display: none">
+              <div class="result-label">Next Number:</div>
+              <div class="result-value" id="single-result-value"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 4: Capitalize Name -->
+        <div class="task" id="task-4">
+          <h2>Task 4: Capitalize First Letter</h2>
+          <p class="task-description">
+            Enter your name in lowercase to capitalize the first letter.
+          </p>
+          <div class="task-group">
+            <label for="name-input">Name (lowercase):</label>
+            <input
+              type="text"
+              id="name-input"
+              placeholder="Enter name in lowercase"
+            />
+          </div>
+          <button class="btn" onclick="capitalizeName()">Capitalize</button>
+          <div class="result" id="name-result" style="display: none">
+            <div class="result-label">Result:</div>
+            <div class="result-value" id="name-result-value"></div>
+          </div>
+        </div>
+
+        <!-- Task 5: BMI Calculator -->
+        <div class="task" id="task-5">
+          <h2>Task 5: BMI Calculator</h2>
+          <p class="task-description">
+            Calculate your Body Mass Index by entering weight and height.
+          </p>
+          <div class="two-column">
+            <div class="task-group">
+              <label for="weight-input">Weight (kg):</label>
+              <input
+                type="number"
+                id="weight-input"
+                placeholder="Enter weight"
+                min="0"
+                step="0.1"
+              />
+            </div>
+            <div class="task-group">
+              <label for="height-input">Height (cm):</label>
+              <input
+                type="number"
+                id="height-input"
+                placeholder="Enter height"
+                min="0"
+                step="0.1"
+              />
+            </div>
+          </div>
+          <button class="btn" onclick="calculateBMI()">Calculate</button>
+          <div class="result" id="bmi-result" style="display: none">
+            <div class="result-label">BMI:</div>
+            <div class="result-value" id="bmi-result-value"></div>
+            <div
+              class="result-label"
+              id="bmi-category"
+              style="margin-top: 15px"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Task 6: Array Elements -->
+        <div class="task" id="task-6">
+          <h2>Task 6: Random Array Elements</h2>
+          <p class="task-description">
+            Generate a random array and retrieve the first and last elements.
+          </p>
+          <div class="task-group">
+            <label for="array-size">Array Size:</label>
+            <input
+              type="number"
+              id="array-size"
+              placeholder="Enter array size"
+              min="2"
+              value="10"
+            />
+          </div>
+          <button class="btn" onclick="generateArray()">Generate Array</button>
+          <div class="result" id="array-display" style="display: none">
+            <div class="result-label">Generated Array:</div>
+            <div
+              id="array-display-value"
+              style="
+                color: #333;
+                margin: 10px 0;
+                font-family: monospace;
+                font-size: 14px;
+              "
+            ></div>
+          </div>
+          <div class="result" id="array-elements-result" style="display: none">
+            <div class="result-label">First Element:</div>
+            <div class="result-value" id="first-element"></div>
+            <div class="result-label" style="margin-top: 15px">
+              Last Element:
+            </div>
+            <div class="result-value" id="last-element"></div>
+          </div>
+        </div>
+
+        <!-- Task 7: Smart Addition -->
+        <div class="task" id="task-7">
+          <h2>Task 7: Real-Time Addition</h2>
+          <p class="task-description">
+            Enter two numbers and the sum will be displayed automatically.
+          </p>
+          <div class="two-column">
+            <div class="task-group">
+              <label for="num1">Number 1:</label>
+              <input
+                type="number"
+                id="num1"
+                placeholder="Enter first number"
+                oninput="calculateSum()"
+              />
+            </div>
+            <div class="task-group">
+              <label for="num2">Number 2:</label>
+              <input
+                type="number"
+                id="num2"
+                placeholder="Enter second number"
+                oninput="calculateSum()"
+              />
+            </div>
+          </div>
+          <div class="result">
+            <div class="result-label">Sum:</div>
+            <div class="result-value" id="sum-result-value">NaN</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

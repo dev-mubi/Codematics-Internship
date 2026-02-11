@@ -1,0 +1,228 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif;
+  background-color: #ffffff;
+  color: #333333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+header p {
+  font-size: 14px;
+  color: #666666;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 20px;
+}
+
+.menu-btn {
+  padding: 10px 18px;
+  background-color: #f5f5f5;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #333333;
+  transition: background-color 0.2s;
+}
+
+.menu-btn:hover {
+  background-color: #eeeeee;
+}
+
+.menu-btn.active {
+  background-color: #333333;
+  color: #ffffff;
+  border-color: #333333;
+}
+
+.content {
+  background-color: #ffffff;
+}
+
+.task {
+  display: none;
+}
+
+.task.active {
+  display: block;
+}
+
+.task h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.task-description {
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.task-group {
+  margin-bottom: 20px;
+}
+
+.task-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333333;
+  font-size: 14px;
+}
+
+.task-group input,
+.task-group select,
+.task-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #333333;
+}
+
+.task-group input:focus,
+.task-group select:focus,
+.task-group textarea:focus {
+  outline: none;
+  border-color: #333333;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.task-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btn {
+  background-color: #333333;
+  color: #ffffff;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-right: 10px;
+  margin-top: 15px;
+}
+
+.btn:hover {
+  background-color: #1a1a1a;
+}
+
+.scenario-btn {
+  background-color: #f5f5f5;
+  color: #333333;
+  padding: 8px 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-bottom: 15px;
+  transition: all 0.2s;
+}
+
+.scenario-btn:hover {
+  background-color: #eeeeee;
+}
+
+.scenario-btn.active {
+  background-color: #333333;
+  color: #ffffff;
+  border-color: #333333;
+}
+
+.result {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 4px;
+  margin-top: 20px;
+  border-left: 3px solid #333333;
+}
+
+.result-label {
+  color: #666666;
+  font-size: 13px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.result-value {
+  color: #333333;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .menu {
+    flex-direction: column;
+  }
+
+  .menu-btn {
+    width: 100%;
+  }
+
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  header h1 {
+    font-size: 24px;
+  }
+
+  .task h2 {
+    font-size: 18px;
+  }
+}

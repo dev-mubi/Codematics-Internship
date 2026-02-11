@@ -129,6 +129,7 @@
             const tasks = [
               {
                 id: "01",
+                taskNumber: "01",
                 title: "Web Layout Foundation",
                 date: "26 Jan",
                 path: "Tasks/Task 1 - 26 January 2026/t1.html",
@@ -136,6 +137,7 @@
               },
               {
                 id: "02",
+                taskNumber: "02",
                 title: "Visual Landing Page",
                 date: "26 Jan",
                 path: "Tasks/Task 02 - 26 January 2026/src/index.html",
@@ -143,6 +145,7 @@
               },
               {
                 id: "03",
+                taskNumber: "03",
                 title: "Submission workflow",
                 date: "27 Jan",
                 path: "Tasks/Task 03 - 27 January 2026/src/index.html",
@@ -150,6 +153,7 @@
               },
               {
                 id: "04",
+                taskNumber: "04",
                 title: "Diagonal Cut Design",
                 date: "28 Jan",
                 path: "Tasks/Task 04 - 28 January 2026/src/index.html",
@@ -157,6 +161,7 @@
               },
               {
                 id: "05",
+                taskNumber: "05",
                 title: "Law Firm",
                 date: "29 Jan",
                 path: "Tasks/Task 05 - 29 January 2026/src/HTML-CSS/index.html",
@@ -164,6 +169,7 @@
               },
               {
                 id: "06",
+                taskNumber: "05",
                 title: "Law Firm",
                 date: "29 Jan",
                 path: "Tasks/Task 05 - 29 January 2026/src/Tailwind/index.html",
@@ -171,10 +177,19 @@
               },
               {
                 id: "07",
+                taskNumber: "06",
                 title: "Stateful Portfolio",
                 date: "04 Feb",
                 path: "Tasks/Task 06 - 4 February 2026/src/index.html",
                 cat: "Dynamic",
+              },
+              {
+                id: "08",
+                taskNumber: "07",
+                title: "Utility Tools",
+                date: "09 Feb",
+                path: "Tasks/Task 07 - 9 February 2026/src/index.html",
+                cat: "Multi-Tool",
               },
             ];
           </script>
@@ -290,7 +305,7 @@
         card.innerHTML = `
                 <div class="flex justify-between items-start mb-6">
                     <div class="w-10 h-10 bg-zinc-50 border border-zinc-100 rounded-lg flex items-center justify-center text-zinc-900 font-bold text-xs mono">
-                        ${task.id}
+                        ${task.taskNumber}
                     </div>
                     <span class="text-[10px] mono text-zinc-400 uppercase font-bold tracking-widest">${task.date}</span>
                 </div>
