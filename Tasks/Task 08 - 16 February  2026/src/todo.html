@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white">
+
+    <div class="p-6 max-w-xl mx-auto">
+        <div class="flex items-center justify-between mb-1">
+            <h1 class="text-lg font-semibold text-gray-800">To-Do List</h1>
+            <span id="count" class="text-xs text-gray-400"></span>
+        </div>
+        <p class="text-sm text-gray-500 mb-5">Tasks are saved in your browser's local storage.</p>
+
+        <div class="flex gap-2 mb-6">
+            <input type="text" id="input" placeholder="What needs to be done?"
+                class="flex-1 border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400 transition-colors">
+            <button onclick="addItem()"
+                class="bg-gray-900 text-white rounded-lg px-5 py-2.5 text-sm font-medium hover:bg-gray-800 flex-shrink-0">Add</button>
+        </div>
+
+        <ul id="list" class="divide-y divide-gray-100"></ul>
+
+        <p id="empty" class="text-center text-sm text-gray-400 py-10">No tasks yet. Add one above.</p>
+    </div>
+
+    <script>
+        var input = document.getElementById("input");
+        var list = document.getElementById("list");
+        var empty = document.getElementById("empty");
+        var countEl = document.getElementById("count");
+
+        var items = JSON.parse(localStorage.getItem("todos")) || [];
+
+        function save() {
+            localStorage.setItem("todos", JSON.stringify(items));
+        }
+
+        function updateCount() {
+            var done = 0;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].done) done++;
+            }
+            countEl.textContent = items.length > 0 ? done + "/" + items.length + " done" : "";
+        }
+
+        function render() {
+            list.innerHTML = "";
+            empty.style.display = items.length === 0 ? "block" : "none";
+
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var li = document.createElement("li");
+                li.className = "flex items-center gap-3 py-3 group";
+
+                var cb = document.createElement("input");
+                cb.type = "checkbox";
+                cb.checked = item.done;
+                cb.className = "accent-gray-800 w-4 h-4 flex-shrink-0 cursor-pointer";
+                cb.setAttribute("data-i", i);
+                cb.addEventListener("change", function () {
+                    var idx = parseInt(this.getAttribute("data-i"));
+                    items[idx].done = this.checked;
+                    save();
+                    render();
+                });
+
+                var label = document.createElement("span");
+                label.className = "flex-1 text-sm " + (item.done ? "line-through text-gray-400" : "text-gray-800");
+                label.textContent = item.text;
+
+                var btns = document.createElement("div");
+                btns.className = "flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity";
+
+                var editBtn = document.createElement("button");
+                editBtn.textContent = "Edit";
+                editBtn.className = "text-xs text-gray-400 hover:text-gray-700 px-2 py-1 rounded hover:bg-gray-100";
+                editBtn.setAttribute("data-i", i);
+                editBtn.addEventListener("click", function () {
+                    editItem(parseInt(this.getAttribute("data-i")));
+                });
+
+                var delBtn = document.createElement("button");
+                delBtn.textContent = "Delete";
+                delBtn.className = "text-xs text-gray-400 hover:text-red-600 px-2 py-1 rounded hover:bg-red-50";
+                delBtn.setAttribute("data-i", i);
+                delBtn.addEventListener("click", function () {
+                    var idx = parseInt(this.getAttribute("data-i"));
+                    items.splice(idx, 1);
+                    save();
+                    render();
+                });
+
+                btns.appendChild(editBtn);
+                btns.appendChild(delBtn);
+
+                li.appendChild(cb);
+                li.appendChild(label);
+                li.appendChild(btns);
+                list.appendChild(li);
+            }
+
+            updateCount();
+        }
+
+        function addItem() {
+            var text = input.value.trim();
+            if (text === "") return;
+            items.push({ text: text, done: false });
+            input.value = "";
+            save();
+            render();
+        }
+
+        function editItem(i) {
+            var newText = prompt("Edit task:", items[i].text);
+            if (newText !== null && newText.trim() !== "") {
+                items[i].text = newText.trim();
+                save();
+                render();
+            }
+        }
+
+        input.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") addItem();
+        });
+
+        render();
+    </script>
+</body>
+</html>

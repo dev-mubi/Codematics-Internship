@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white">
+
+    <div class="p-6 max-w-sm mx-auto">
+        <h1 class="text-lg font-semibold text-gray-800 mb-1">Calculator</h1>
+        <p class="text-sm text-gray-500 mb-5">Basic arithmetic operations</p>
+
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+            <div class="bg-gray-50 p-4">
+                <div id="prev-expr" class="text-right text-sm text-gray-400 h-5 font-mono"></div>
+                <input type="text" id="screen" readonly
+                    class="w-full text-right text-3xl font-mono bg-transparent outline-none text-gray-800 mt-1"
+                    value="0">
+            </div>
+
+            <div class="grid grid-cols-4 border-t border-gray-200">
+                <button onclick="clearAll()" class="col-span-2 py-4 text-red-600 font-medium border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">AC</button>
+                <button onclick="backspace()" class="py-4 text-gray-600 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">&#9003;</button>
+                <button onclick="addOp('/')" class="py-4 text-blue-600 font-medium border-b border-gray-200 hover:bg-gray-50 active:bg-gray-100">÷</button>
+
+                <button onclick="addNum('7')" class="py-4 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">7</button>
+                <button onclick="addNum('8')" class="py-4 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">8</button>
+                <button onclick="addNum('9')" class="py-4 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">9</button>
+                <button onclick="addOp('*')" class="py-4 text-blue-600 font-medium border-b border-gray-200 hover:bg-gray-50 active:bg-gray-100">×</button>
+
+                <button onclick="addNum('4')" class="py-4 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">4</button>
+                <button onclick="addNum('5')" class="py-4 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">5</button>
+                <button onclick="addNum('6')" class="py-4 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">6</button>
+                <button onclick="addOp('-')" class="py-4 text-blue-600 font-medium border-b border-gray-200 hover:bg-gray-50 active:bg-gray-100">−</button>
+
+                <button onclick="addNum('1')" class="py-4 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">1</button>
+                <button onclick="addNum('2')" class="py-4 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">2</button>
+                <button onclick="addNum('3')" class="py-4 border-b border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">3</button>
+                <button onclick="addOp('+')" class="py-4 text-blue-600 font-medium border-b border-gray-200 hover:bg-gray-50 active:bg-gray-100">+</button>
+
+                <button onclick="addNum('0')" class="col-span-2 py-4 border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">0</button>
+                <button onclick="addNum('.')" class="py-4 border-r border-gray-200 hover:bg-gray-50 active:bg-gray-100">.</button>
+                <button onclick="getResult()" class="py-4 bg-blue-600 text-white font-medium hover:bg-blue-700 active:bg-blue-800">=</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var screen = document.getElementById("screen");
+        var prevExpr = document.getElementById("prev-expr");
+        var expr = "";
+        var solved = false;
+
+        function show(val) {
+            screen.value = val || "0";
+        }
+
+        function addNum(n) {
+            if (solved) {
+                expr = "";
+                solved = false;
+            }
+            expr += n;
+            show(expr);
+        }
+
+        function addOp(op) {
+            solved = false;
+            if (expr === "") return;
+            var last = expr.slice(-1);
+            if ("+-*/".indexOf(last) !== -1) {
+                expr = expr.slice(0, -1);
+            }
+            expr += op;
+            show(expr);
+        }
+
+        function clearAll() {
+            expr = "";
+            solved = false;
+            prevExpr.textContent = "";
+            show("0");
+        }
+
+        function backspace() {
+            expr = expr.slice(0, -1);
+            solved = false;
+            show(expr);
+        }
+
+        function getResult() {
+            if (expr === "") return;
+            try {
+                var readable = expr.replace(/\*/g, "×").replace(/\//g, "÷");
+                var ans = eval(expr);
+                if (ans === Infinity || ans === -Infinity) {
+                    show("Error");
+                    expr = "";
+                } else {
+                    ans = parseFloat(ans.toFixed(8));
+                    prevExpr.textContent = readable + " =";
+                    show(ans);
+                    expr = String(ans);
+                }
+                solved = true;
+            } catch (e) {
+                show("Error");
+                expr = "";
+            }
+        }
+    </script>
+</body>
+</html>

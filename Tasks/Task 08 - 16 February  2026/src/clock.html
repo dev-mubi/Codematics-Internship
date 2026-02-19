@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white min-h-screen flex items-center justify-center">
+
+    <div class="text-center px-4">
+        <div class="flex items-baseline justify-center gap-1">
+            <span id="hrs" class="text-8xl sm:text-9xl font-extralight text-gray-800 font-mono tracking-tight">12</span>
+            <span class="text-6xl sm:text-7xl font-extralight text-gray-300 animate-pulse">:</span>
+            <span id="min" class="text-8xl sm:text-9xl font-extralight text-gray-800 font-mono tracking-tight">00</span>
+            <span class="text-6xl sm:text-7xl font-extralight text-gray-300 animate-pulse">:</span>
+            <span id="sec" class="text-8xl sm:text-9xl font-extralight text-gray-800 font-mono tracking-tight">00</span>
+        </div>
+        <div class="mt-2">
+            <span id="period" class="text-lg text-gray-400 font-mono tracking-widest">AM</span>
+        </div>
+        <div class="mt-6 border-t border-gray-200 pt-4">
+            <p id="today" class="text-sm text-gray-500 tracking-wide"></p>
+        </div>
+    </div>
+
+    <script>
+        var hrs = document.getElementById("hrs");
+        var min = document.getElementById("min");
+        var sec = document.getElementById("sec");
+        var period = document.getElementById("period");
+        var today = document.getElementById("today");
+
+        function pad(n) {
+            return n < 10 ? "0" + n : String(n);
+        }
+
+        function tick() {
+            var now = new Date();
+            var h = now.getHours();
+            var m = now.getMinutes();
+            var s = now.getSeconds();
+
+            var ampm = h >= 12 ? "PM" : "AM";
+            var h12 = h % 12;
+            if (h12 === 0) h12 = 12;
+
+            hrs.textContent = pad(h12);
+            min.textContent = pad(m);
+            sec.textContent = pad(s);
+            period.textContent = ampm;
+
+            var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            var monthNames = ["January", "February", "March", "April", "May", "June",
+                              "July", "August", "September", "October", "November", "December"];
+            today.textContent = dayNames[now.getDay()] + ", " + now.getDate() + " " + monthNames[now.getMonth()] + " " + now.getFullYear();
+        }
+
+        tick();
+        setInterval(tick, 1000);
+    </script>
+</body>
+</html>

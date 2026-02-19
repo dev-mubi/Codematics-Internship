@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white">
+
+    <div class="p-6 max-w-lg mx-auto">
+        <h1 class="text-lg font-semibold text-gray-800 mb-1">Temperature Converter</h1>
+        <p class="text-sm text-gray-500 mb-6">Type in either field to convert instantly.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="border border-gray-200 rounded-lg p-5">
+                <label class="text-xs text-gray-400 uppercase tracking-wide">Celsius</label>
+                <div class="flex items-baseline gap-1 mt-2">
+                    <input type="number" id="cel" placeholder="0"
+                        class="w-full text-3xl font-light text-gray-800 outline-none bg-transparent">
+                    <span class="text-2xl text-gray-300">°C</span>
+                </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-lg p-5">
+                <label class="text-xs text-gray-400 uppercase tracking-wide">Fahrenheit</label>
+                <div class="flex items-baseline gap-1 mt-2">
+                    <input type="number" id="fah" placeholder="32"
+                        class="w-full text-3xl font-light text-gray-800 outline-none bg-transparent">
+                    <span class="text-2xl text-gray-300">°F</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="output" class="mt-5 text-sm text-gray-500 text-center"></div>
+
+        <div class="mt-6 border-t border-gray-100 pt-4">
+            <p class="text-xs text-gray-400">Formula: °F = (°C × 9/5) + 32 &nbsp;|&nbsp; °C = (°F − 32) × 5/9</p>
+        </div>
+    </div>
+
+    <script>
+        var cel = document.getElementById("cel");
+        var fah = document.getElementById("fah");
+        var output = document.getElementById("output");
+
+        cel.addEventListener("input", function () {
+            var c = parseFloat(cel.value);
+            if (isNaN(c)) {
+                fah.value = "";
+                output.textContent = "";
+                return;
+            }
+            var f = (c * 9 / 5) + 32;
+            f = parseFloat(f.toFixed(2));
+            fah.value = f;
+            output.textContent = c + "°C = " + f + "°F";
+        });
+
+        fah.addEventListener("input", function () {
+            var f = parseFloat(fah.value);
+            if (isNaN(f)) {
+                cel.value = "";
+                output.textContent = "";
+                return;
+            }
+            var c = (f - 32) * 5 / 9;
+            c = parseFloat(c.toFixed(2));
+            cel.value = c;
+            output.textContent = f + "°F = " + c + "°C";
+        });
+    </script>
+</body>
+</html>

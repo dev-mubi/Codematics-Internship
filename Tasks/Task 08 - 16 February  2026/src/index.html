@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 08 - 16 February 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white h-screen flex flex-col">
+
+    <header class="border-b border-gray-200 px-5 py-3 flex items-center justify-between">
+        <h1 class="text-sm font-semibold text-gray-800">Task 08  - Mubashir Shahzaib</h1>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <nav class="w-56 border-r border-gray-200 py-4 px-3 space-y-1 flex-shrink-0 overflow-y-auto">
+            <a href="carousel.html" target="taskFrame" class="nav-link block px-3 py-2 text-sm text-gray-700 rounded hover:bg-gray-100">1. Carousel</a>
+            <a href="calculator.html" target="taskFrame" class="nav-link block px-3 py-2 text-sm text-gray-700 rounded hover:bg-gray-100">2. Calculator</a>
+            <a href="clock.html" target="taskFrame" class="nav-link block px-3 py-2 text-sm text-gray-700 rounded hover:bg-gray-100">3. Digital Clock</a>
+            <a href="temperature.html" target="taskFrame" class="nav-link block px-3 py-2 text-sm text-gray-700 rounded hover:bg-gray-100">4. Temperature Converter</a>
+            <a href="password.html" target="taskFrame" class="nav-link block px-3 py-2 text-sm text-gray-700 rounded hover:bg-gray-100">5. Password Generator</a>
+            <a href="todo.html" target="taskFrame" class="nav-link block px-3 py-2 text-sm text-gray-700 rounded hover:bg-gray-100">6. To-Do List</a>
+        </nav>
+
+        <main class="flex-1">
+            <iframe name="taskFrame" id="taskFrame" src="carousel.html" class="w-full h-full border-0"></iframe>
+        </main>
+    </div>
+
+    <script>
+        var links = document.querySelectorAll(".nav-link");
+        function setActive(target) {
+            for (var i = 0; i < links.length; i++) {
+                links[i].classList.remove("bg-gray-100", "font-medium");
+            }
+            target.classList.add("bg-gray-100", "font-medium");
+        }
+        for (var i = 0; i < links.length; i++) {
+            links[i].addEventListener("click", function () {
+                setActive(this);
+            });
+        }
+        setActive(links[0]);
+    </script>
+</body>
+</html>
