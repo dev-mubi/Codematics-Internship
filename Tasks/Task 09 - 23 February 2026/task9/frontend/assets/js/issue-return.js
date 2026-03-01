@@ -191,7 +191,7 @@ function renderIssuesTable(issues) {
         return `
             <tr class="hover:bg-gray-50 dark:hover:bg-surface-border/30 transition-colors">
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white group">
-                    <span class="font-mono text-xs text-primary-600 dark:text-primary-400 cursor-copy border-b border-dashed border-primary-300 dark:border-primary-700" title="Click to copy for return" onclick="copyToReturn('${issue.issueId || issue._id}')">
+                    <span class="font-mono text-xs text-gray-900 dark:text-gray-300 cursor-copy border-b border-dashed border-gray-400 dark:border-gray-500" title="Click to copy for return" onclick="copyToReturn('${issue.issueId || issue._id}')">
                         ${issue.issueId || issue._id.substring(0,8)+'...'}
                     </span>
                 </td>
