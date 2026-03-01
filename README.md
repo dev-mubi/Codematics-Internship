@@ -42,6 +42,9 @@ Each task is placed in its own folder and includes a separate README file explai
 - **Task 08**: JavaScript Practice Tasks  
   Focused on building six standalone JavaScript exercises including a responsive image carousel, calculator, digital clock, temperature converter, random password generator, and a to-do list app with localStorage persistence. Uses vanilla JavaScript and Tailwind CSS with clean, minimal styling.
 
+- **Task 09**: Library Management System (Full-Stack)  
+  Focused on building a full-stack library management application with a pure HTML, CSS (Tailwind via CDN), and Vanilla JavaScript frontend, powered by a Node.js, Express, and MongoDB backend. Features include secure JWT authentication, responsive layouts, data persistence for books, members, and issues, as well as a high contrast minimal monochrome UI in both light and dark modes.
+
 More tasks will be added as the internship progresses.
 
 ---

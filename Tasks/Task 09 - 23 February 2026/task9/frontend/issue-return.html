@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue & Return - Library Management System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#f9fafb', 100: '#f3f4f6', 500: '#374151', 600: '#000000', 700: '#000000', 900: '#000000', dark: '#ffffff' },
+                        surface: { dark: '#000000', card: '#111111', border: '#333333' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+</head>
+<body class="bg-[#f4f6f8] text-gray-900 dark:bg-surface-dark dark:text-white min-h-screen transition-colors duration-200 overflow-hidden flex">
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-40 hidden lg:hidden"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white dark:bg-surface-card border-r border-gray-200 dark:border-surface-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+        <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-surface-border">
+            <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">LMS</span>
+        </div>
+        
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <a href="index.html" class="flex items-center px-4 py-3 text-gray-600 hover:bg-[#f4f6f8] hover:text-gray-900 dark:text-gray-400 dark:hover:bg-surface-border/50 dark:hover:text-white rounded-xl font-medium transition-colors">
+                Dashboard
+            </a>
+            <a href="books.html" class="flex items-center px-4 py-3 text-gray-600 hover:bg-[#f4f6f8] hover:text-gray-900 dark:text-gray-400 dark:hover:bg-surface-border/50 dark:hover:text-white rounded-xl font-medium transition-colors">
+                Books Inventory
+            </a>
+            <a href="members.html" class="flex items-center px-4 py-3 text-gray-600 hover:bg-[#f4f6f8] hover:text-gray-900 dark:text-gray-400 dark:hover:bg-surface-border/50 dark:hover:text-white rounded-xl font-medium transition-colors">
+                Members Directory
+            </a>
+            <a href="issue-return.html" class="flex items-center px-4 py-3 bg-primary-50 text-black dark:text-gray-300 dark:bg-primary-900/30 dark:text-primary-400 rounded-xl font-medium transition-colors">
+                Issue & Return
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-200 dark:border-surface-border">
+            <button id="logout-btn" class="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-xl font-medium transition-colors">
+                Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+        
+        <!-- Top Header -->
+        <header class="bg-white dark:bg-surface-card border-b border-gray-200 dark:border-surface-border h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0">
+            <div class="flex items-center">
+                <button id="mobile-menu-btn" class="lg:hidden text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white focus:outline-none p-2 mr-3 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+                <nav class="hidden sm:flex" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2">
+                        <li><span class="text-sm font-medium text-gray-500 dark:text-gray-400">LMS</span></li>
+                        <li></li>
+                        <li><span class="text-sm font-semibold text-gray-900 dark:text-white">Issue & Return</span></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="text-gray-900 hover:text-gray-600 dark:text-white dark:hover:text-gray-300 p-2 rounded-lg transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></button>
+                
+            </div>
+        </header>
+
+        <!-- Main Scrollable Area -->
+        <main class="flex-1 overflow-y-auto bg-[#f4f6f8] dark:bg-surface-dark p-4 sm:p-6 lg:p-8">
+            <div class="max-w-6xl mx-auto">
+                
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
+                        Transaction Processing
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Issue books to members and process returns securely.
+                    </p>
+                </div>
+
+                <!-- Action Panels Container -->
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-8">
+                    
+                    <!-- Issue Book Panel -->
+                    <div class="bg-white dark:bg-surface-card shadow-sm rounded-2xl border border-gray-100 dark:border-surface-border overflow-hidden flex flex-col">
+                        <div class="px-6 py-5 border-b border-gray-100 dark:border-surface-border flex items-center bg-[#f4f6f8]/50 dark:bg-black">
+                            <h3 class="text-lg leading-6 font-semibold text-gray-900 dark:text-white">Issue Book</h3>
+                        </div>
+                        <div class="p-6 flex-1">
+                            <form id="issue-form" class="space-y-5">
+                                <div id="issue-error" class="hidden p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 text-sm font-medium"></div>
+                                
+                                <div>
+                                    <label for="issue-member-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Member ID</label>
+                                    <input type="text" id="issue-member-id" required class="mt-1.5 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-surface-border dark:bg-surface-dark dark:text-white rounded-xl py-2.5 px-3 border transition-colors" placeholder="e.g. M-001">
+                                </div>
+                                <div>
+                                    <label for="issue-book-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Book ID</label>
+                                    <input type="text" id="issue-book-id" required class="mt-1.5 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-surface-border dark:bg-surface-dark dark:text-white rounded-xl py-2.5 px-3 border transition-colors" placeholder="e.g. B-001">
+                                </div>
+                                <div>
+                                    <label for="issue-due-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Due Date</label>
+                                    <input type="date" id="issue-due-date" required class="mt-1.5 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-surface-border dark:bg-surface-dark dark:text-white rounded-xl py-2.5 px-3 border transition-colors">
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Default cycle is 14 days.</p>
+                                </div>
+                                <div class="pt-2">
+                                    <button type="submit" id="issue-btn" class="w-full inline-flex justify-center items-center rounded-xl shadow-sm px-4 py-3 bg-black dark:bg-white text-sm font-semibold text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                                        Process Issue
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Return Book Panel -->
+                    <div class="bg-white dark:bg-surface-card shadow-sm rounded-2xl border border-gray-100 dark:border-surface-border overflow-hidden flex flex-col">
+                        <div class="px-6 py-5 border-b border-gray-100 dark:border-surface-border flex items-center bg-[#f4f6f8]/50 dark:bg-black">
+                            <h3 class="text-lg leading-6 font-semibold text-gray-900 dark:text-white">Return Book</h3>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <form id="return-form" class="space-y-5">
+                                <div id="return-error" class="hidden p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 text-sm font-medium"></div>
+                                <div id="return-success" class="hidden p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50"></div>
+                                
+                                <div>
+                                    <label for="return-issue-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction ID</label>
+                                    <input type="text" id="return-issue-id" required class="mt-1.5 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-surface-border dark:bg-surface-dark dark:text-white rounded-xl py-2.5 px-3 border transition-colors" placeholder="Scan or enter ID...">
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Tip: Click an ID in the table below to autofill.</p>
+                                </div>
+                                <div class="pt-2 mt-auto">
+                                    <button type="submit" id="return-btn" class="w-full inline-flex justify-center items-center rounded-xl shadow-sm px-4 py-3 border border-gray-300 dark:border-surface-border bg-white dark:bg-surface-card text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-[#f4f6f8] dark:hover:bg-surface-border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                                        Complete Return
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Transaction Database -->
+                <div class="bg-white dark:bg-surface-card shadow-sm rounded-2xl border border-gray-100 dark:border-surface-border overflow-hidden">
+                    <div class="px-4 py-4 border-b border-gray-100 dark:border-surface-border bg-[#f4f6f8]/50 dark:bg-black sm:flex sm:items-center sm:justify-between w-full">
+                        <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-3 sm:mb-0">Transaction Master Log</h3>
+                        <div class="relative rounded-xl shadow-sm max-w-sm w-full">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                </div>
+                            <input type="text" id="history-search" class="focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 sm:text-sm border-gray-300 dark:border-surface-border rounded-xl bg-white dark:bg-surface-card text-gray-900 dark:text-white py-2 border" placeholder="Filter log...">
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-surface-border" id="issues-table">
+                            <thead class="bg-[#f4f6f8]/50 dark:bg-black">
+                                <tr>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Transaction ID</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Asset</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Member</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status & Dates</th>
+                                </tr>
+                            </thead>
+                            <tbody id="issues-tbody" class="bg-white dark:bg-surface-card divide-y divide-gray-100 dark:divide-surface-border">
+                                <tr>
+                                    <td colspan="4" class="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400">
+                                        Loading database records...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col items-end space-y-2 pointer-events-none"></div>
+
+    <script src="assets/js/common.js" defer></script>
+    <script src="assets/js/issue-return.js" defer></script>
+</body>
+</html>
