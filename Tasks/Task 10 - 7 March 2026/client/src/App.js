@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TrendingUp, LayoutDashboard, PieChart, LogOut, Sun, Moon } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 import Dashboard from "./pages/Dashboard";
 import Budgets from "./pages/Budgets";
 import Auth from "./pages/Auth";
@@ -15,6 +16,7 @@ function App() {
   return (
     <ToastProvider>
       <AppContent />
+      <Analytics />
     </ToastProvider>
   );
 }

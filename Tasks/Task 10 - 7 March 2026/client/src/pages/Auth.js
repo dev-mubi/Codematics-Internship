@@ -333,10 +333,10 @@ const Auth = ({ onLoginSuccess }) => {
             <>
               <div className="auth-header">
                 <h2>{view === "login" ? "Welcome back" : "Begin your journey"}</h2>
-                <p className="subtitle">
+                <p className="auth-subtitle">
                   {view === "login"
-                    ? "Enter your credentials to access your portfolio."
-                    : "Create an account to master your financial future."}
+                    ? "Enter your credentials to access your dashboard."
+                    : "Create an account to track your wealth."}
                 </p>
               </div>
 

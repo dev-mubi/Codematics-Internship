@@ -15,6 +15,20 @@ API.interceptors.request.use(async (config) => {
   return config;
 });
 
+// Automatically handle unauthorized errors
+API.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response && error.response.status === 401) {
+      // Clear supabase session
+      await supabase.auth.signOut();
+      // Force page reload to trigger App.js routing back to <Auth />
+      window.location.href = "/";
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Transaction APIs
 export const getTransactions = (filters = {}) =>
   API.get("/transactions", { params: filters });

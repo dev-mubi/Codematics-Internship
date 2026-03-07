@@ -312,7 +312,9 @@ const Dashboard = () => {
       <div className="dashboard__container">
         {/* Render Premium Loader overlay when fetching initial data */}
         {isLoading && transactions.length === 0 ? (
-          <PremiumLoader message="Fetching your portfolio data..." />
+          <div className="dashboard-content">
+            <PremiumLoader message="Fetching your financial data..." />
+          </div>
         ) : (
           <>
             {/* Summary Stats */}
