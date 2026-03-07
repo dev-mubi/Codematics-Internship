@@ -27,6 +27,7 @@ const TransactionForm = ({
   );
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,21 +53,27 @@ const TransactionForm = ({
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    onSubmit({
-      ...formData,
-      amount: parseFloat(formData.amount),
-    });
+    
+    setIsSubmitting(true);
+    try {
+      await onSubmit({
+        ...formData,
+        amount: parseFloat(formData.amount),
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <form className="transaction-form" onSubmit={handleSubmit}>
+    <form className={`transaction-form ${isSubmitting ? "submitting" : ""}`} onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="title">Title / Description *</label>
         <input
@@ -77,6 +84,7 @@ const TransactionForm = ({
           onChange={handleChange}
           placeholder="e.g., Grocery shopping"
           className={errors.title ? "input-error" : ""}
+          disabled={isSubmitting}
         />
         {errors.title && <span className="error-message">{errors.title}</span>}
       </div>
@@ -94,6 +102,7 @@ const TransactionForm = ({
             step="0.01"
             min="0"
             className={errors.amount ? "input-error" : ""}
+            disabled={isSubmitting}
           />
           {errors.amount && (
             <span className="error-message">{errors.amount}</span>
@@ -108,6 +117,7 @@ const TransactionForm = ({
             value={formData.category}
             onChange={handleChange}
             className={errors.category ? "input-error" : ""}
+            disabled={isSubmitting}
           >
             {categories.map((cat) => (
               <option key={cat} value={cat}>
@@ -130,6 +140,7 @@ const TransactionForm = ({
           value={formData.date}
           onChange={handleChange}
           className={errors.date ? "input-error" : ""}
+          disabled={isSubmitting}
         />
         {errors.date && <span className="error-message">{errors.date}</span>}
       </div>
@@ -143,15 +154,29 @@ const TransactionForm = ({
           onChange={handleChange}
           placeholder="Optional notes about this transaction"
           rows="3"
+          disabled={isSubmitting}
         />
       </div>
 
       <div className="form-actions">
-        <button type="button" className="btn btn-secondary" onClick={onCancel}>
+        <button 
+          type="button" 
+          className="btn btn-secondary" 
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
           Cancel
         </button>
-        <button type="submit" className="btn btn-primary">
-          {initialData ? "Update Transaction" : "Add Transaction"}
+        <button 
+          type="submit" 
+          className="btn btn-primary form-submit-btn"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <span className="btn-spinner"></span>
+          ) : (
+            initialData ? "Update Transaction" : "Add Transaction"
+          )}
         </button>
       </div>
     </form>

@@ -1,0 +1,48 @@
+.sign-out-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.sign-out-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: rgba(239, 68, 68, 0.1); /* Subtle red bg */
+  border-radius: 50%;
+  color: #ef4444; /* Red icon color */
+  margin-bottom: 0.5rem;
+}
+
+.sign-out-text {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.sign-out-actions {
+  width: 100%;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Specific styling for the destructive primary button */
+.danger-btn {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.danger-btn:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+[data-theme="dark"] .danger-btn:hover {
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
+import PremiumLoader from "../components/PremiumLoader";
 import BudgetForm from "../components/BudgetForm";
 import BudgetCard from "../components/BudgetCard";
 import BudgetComparison from "../components/BudgetComparison";
@@ -9,6 +10,7 @@ import MonthlySpendings from "../components/MonthlySpendings";
 import CategoryDistribution from "../components/CategoryDistribution";
 import { useTheme } from "../hooks/useTheme";
 import * as api from "../utils/api";
+import { useToast } from "../hooks/useToast";
 import {
   formatCurrency,
   getMonthYear,
@@ -25,6 +27,7 @@ const Budgets = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [categoryBreakdown, setCategoryBreakdown] = useState({});
   const [chartData, setChartData] = useState([]);
+  const toast = useToast();
 
   const categories = [
     "food",
@@ -37,8 +40,8 @@ const Budgets = () => {
   ];
 
   // Fetch budgets and transactions
-  const fetchData = async () => {
-    setIsLoading(true);
+  const fetchData = async (showLoader = true) => {
+    if (showLoader) setIsLoading(true);
     try {
       const now = new Date();
       const currentMonth = `${now.getFullYear()}-${String(
@@ -83,9 +86,9 @@ const Budgets = () => {
       setChartData(comparisonData);
     } catch (error) {
       console.error("Error fetching data:", error);
-      alert("Error fetching data. Please check server connection.");
+      toast.error("Error fetching data. Please check server connection.");
     } finally {
-      setIsLoading(false);
+      if (showLoader) setIsLoading(false);
     }
   };
 
@@ -96,13 +99,13 @@ const Budgets = () => {
   // Add budget
   const handleAddBudget = async (data) => {
     try {
-      const response = await api.createBudget(data);
-      setBudgets([...budgets, response.data]);
-      setShowAddModal(false);
-      await fetchData();
+      await api.createBudget(data);
+      await fetchData(false); // Refresh data silently without main loader
+      setShowAddModal(false); // Close modal only after data is ready
+      toast.success("Budget added successfully!");
     } catch (error) {
       console.error("Error adding budget:", error);
-      alert("Error adding budget. Category may already have a budget.");
+      toast.error("Error adding budget. Category may already have a budget.");
     }
   };
 
@@ -112,13 +115,13 @@ const Budgets = () => {
       const budgetId = budgets.find((b) => b.category === editingCategory)?._id;
       if (!budgetId) return;
 
-      const response = await api.updateBudget(budgetId, data);
-      setBudgets(budgets.map((b) => (b._id === budgetId ? response.data : b)));
-      setEditingCategory(null);
-      await fetchData();
+      await api.updateBudget(budgetId, data);
+      await fetchData(false); // Refresh data silently
+      setEditingCategory(null); // Close modal only after data is ready
+      toast.success("Budget updated successfully!");
     } catch (error) {
       console.error("Error updating budget:", error);
-      alert("Error updating budget");
+      toast.error("Error updating budget");
     }
   };
 
@@ -129,11 +132,11 @@ const Budgets = () => {
       if (!budget) return;
 
       await api.deleteBudget(budget._id);
-      setBudgets(budgets.filter((b) => b.category !== category));
-      await fetchData();
+      await fetchData(false); // Refresh data silently
+      toast.info("Budget deleted");
     } catch (error) {
       console.error("Error deleting budget:", error);
-      alert("Error deleting budget");
+      toast.error("Error deleting budget");
     }
   };
 
@@ -169,15 +172,17 @@ const Budgets = () => {
           </button>
         </div>
 
-        {/* Budget Cards Grid */}
-        <div className="budgets__grid">
-          {isLoading ? (
-            <div className="loading-spinner">Loading budgets...</div>
-          ) : budgets.length === 0 ? (
-            <div className="empty-state">
-              <p>No budgets set yet. Create one to get started!</p>
-            </div>
-          ) : (
+        {isLoading && budgets.length === 0 ? (
+          <PremiumLoader message="Loading your budgets..." />
+        ) : (
+          <>
+            {/* Budget Cards Grid */}
+            <div className="budgets__grid">
+              {budgets.length === 0 ? (
+                <div className="empty-state">
+                  <p>No budgets set yet. Create one to get started!</p>
+                </div>
+              ) : (
             budgets.map((budget) => (
               <BudgetCard
                 key={budget._id}
@@ -203,6 +208,8 @@ const Budgets = () => {
             </div>
           </div>
         </div>
+        </>
+        )}
       </div>
 
       {/* Modals */}

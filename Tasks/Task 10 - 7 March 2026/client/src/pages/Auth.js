@@ -14,8 +14,36 @@ const QUOTES = [
     author: "Warren Buffett",
   },
   {
-    text: "The speed of your success is limited only by your dedication and what you're willing to sacrifice.",
-    author: "Nathan W. Morris",
+    text: "A budget is telling your money where to go instead of wondering where it went.",
+    author: "Dave Ramsey",
+  },
+  {
+    text: "Beware of little expenses; a small leak will sink a great ship.",
+    author: "Benjamin Franklin",
+  },
+  {
+    text: "Never spend your money before you have it.",
+    author: "Thomas Jefferson",
+  },
+  {
+    text: "If you buy things you do not need, soon you will have to sell things you need.",
+    author: "Warren Buffett",
+  },
+  {
+    text: "A penny saved is a penny earned.",
+    author: "Benjamin Franklin",
+  },
+  {
+    text: "Too many people spend money they earned to buy things they don’t want.",
+    author: "Will Rogers",
+  },
+  {
+    text: "The habit of saving is itself an education.",
+    author: "T. T. Munger",
+  },
+  {
+    text: "Small daily financial habits lead to long-term wealth.",
+    author: "Anonymous",
   },
 ];
 
@@ -234,7 +262,7 @@ const Auth = ({ onLoginSuccess }) => {
                 </div>
                 <h2>Check your email</h2>
                 <p className="subtitle">
-                  We sent a 6-digit verification code to<br />
+                  We sent an 8-digit verification code to<br />
                   <strong>{pendingEmail}</strong>
                 </p>
               </div>

@@ -2,12 +2,14 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Download, RotateCcw, Activity, DollarSign, Search, Filter, Plus } from "lucide-react";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
+import PremiumLoader from "../components/PremiumLoader";
 import TransactionForm from "../components/TransactionForm";
 import TransactionList from "../components/TransactionList";
 import { useTheme } from "../hooks/useTheme";
 import { useCommandHistory } from "../hooks/useUndoRedo";
 import { useDebounce } from "../hooks/useDebounce";
 import * as api from "../utils/api";
+import { useToast } from "../hooks/useToast";
 import {
   formatDate,
   formatCurrency,
@@ -32,6 +34,7 @@ const Dashboard = () => {
   });
 
   const { push, undo, redo, canUndo, canRedo } = useCommandHistory();
+  const toast = useToast();
 
   const categories = [
     "food",
@@ -79,7 +82,7 @@ const Dashboard = () => {
       await refreshStats(filters);
     } catch (error) {
       console.error("Error fetching transactions:", error);
-      alert("Error fetching transactions. Please check server connection.");
+      toast.error("Error fetching transactions. Please check server connection.");
     } finally {
       setIsLoading(false);
     }
@@ -131,6 +134,7 @@ const Dashboard = () => {
         totalTransactions: prev.totalTransactions + 1,
       }));
       setShowAddModal(false);
+      toast.success("Transaction added successfully!");
 
       push({
         description: `Add "${created.title}"`,
@@ -157,7 +161,7 @@ const Dashboard = () => {
       });
     } catch (error) {
       console.error("Error adding transaction:", error);
-      alert("Error adding transaction");
+      toast.error("Error adding transaction");
     }
   };
 
@@ -178,6 +182,7 @@ const Dashboard = () => {
         totalExpenses: prev.totalExpenses - original.amount + updated.amount,
       }));
       setEditingTransaction(null);
+      toast.success("Transaction updated successfully!");
 
       push({
         description: `Edit "${original.title}"`,
@@ -212,7 +217,7 @@ const Dashboard = () => {
       });
     } catch (error) {
       console.error("Error updating transaction:", error);
-      alert("Error updating transaction");
+      toast.error("Error updating transaction");
     }
   };
 
@@ -231,6 +236,7 @@ const Dashboard = () => {
         totalExpenses: prev.totalExpenses - target.amount,
         totalTransactions: prev.totalTransactions - 1,
       }));
+      toast.info("Transaction deleted");
 
       push({
         description: `Delete "${target.title}"`,
@@ -263,14 +269,14 @@ const Dashboard = () => {
       });
     } catch (error) {
       console.error("Error deleting transaction:", error);
-      alert("Error deleting transaction");
+      toast.error("Error deleting transaction");
     }
   };
 
   // Export as CSV
   const handleExportCSV = () => {
     if (filteredTransactions.length === 0) {
-      alert("No transactions to export");
+      toast.error("No transactions to export");
       return;
     }
 
@@ -304,31 +310,36 @@ const Dashboard = () => {
       <Header isDark={isDark} onToggleTheme={toggleTheme} title="Overview" />
 
       <div className="dashboard__container">
-        {/* Summary Stats */}
-        <div className="summary-stats">
-          <div className="stat-card">
-            <div className="stat-card-header">
-              <h3 className="stat-label">Total Expenses {formatMonthYear()}</h3>
-              <div className="stat-icon-wrapper">
-                <DollarSign size={20} className="stat-icon" />
+        {/* Render Premium Loader overlay when fetching initial data */}
+        {isLoading && transactions.length === 0 ? (
+          <PremiumLoader message="Fetching your portfolio data..." />
+        ) : (
+          <>
+            {/* Summary Stats */}
+            <div className="summary-stats">
+              <div className="stat-card">
+                <div className="stat-card-header">
+                  <h3 className="stat-label">Total Expenses {formatMonthYear()}</h3>
+                  <div className="stat-icon-wrapper">
+                    <DollarSign size={20} className="stat-icon" />
+                  </div>
+                </div>
+                <p className="stat-value">{formatCurrency(stats.totalExpenses)}</p>
+              </div>
+              <div className="stat-card">
+                <div className="stat-card-header">
+                  <h3 className="stat-label">Transactions</h3>
+                  <div className="stat-icon-wrapper">
+                    <Activity size={20} className="stat-icon" />
+                  </div>
+                </div>
+                <p className="stat-value">{stats.totalTransactions}</p>
               </div>
             </div>
-            <p className="stat-value">{formatCurrency(stats.totalExpenses)}</p>
-          </div>
-          <div className="stat-card">
-            <div className="stat-card-header">
-              <h3 className="stat-label">Transactions</h3>
-              <div className="stat-icon-wrapper">
-                <Activity size={20} className="stat-icon" />
-              </div>
-            </div>
-            <p className="stat-value">{stats.totalTransactions}</p>
-          </div>
-        </div>
 
-        {/* Filters and Actions */}
-        <div className="controls">
-          <div className="search-bar">
+            {/* Filters and Actions */}
+            <div className="controls">
+              <div className="search-bar">
             <div className="input-wrapper search-wrapper">
               <Search size={18} className="input-icon" />
               <input
@@ -423,6 +434,8 @@ const Dashboard = () => {
             isLoading={isLoading}
           />
         </div>
+        </>
+        )}
       </div>
 
       {/* Modals */}

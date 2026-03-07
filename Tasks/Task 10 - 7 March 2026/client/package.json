@@ -1,6 +1,6 @@
 {
-  "name": "finance-dashboard-client",
-  "version": "0.1.0",
+  "name": "onyx-wealth-client",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@supabase/supabase-js": "^2.98.0",

@@ -23,6 +23,7 @@ const BudgetForm = ({
   );
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,21 +48,27 @@ const BudgetForm = ({
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    onSubmit({
-      ...formData,
-      monthlyLimit: parseFloat(formData.monthlyLimit),
-    });
+    
+    setIsSubmitting(true);
+    try {
+      await onSubmit({
+        ...formData,
+        monthlyLimit: parseFloat(formData.monthlyLimit),
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <form className="budget-form" onSubmit={handleSubmit}>
+    <form className={`budget-form ${isSubmitting ? "submitting" : ""}`} onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="category">Category *</label>
         <select
@@ -69,7 +76,7 @@ const BudgetForm = ({
           name="category"
           value={formData.category}
           onChange={handleChange}
-          disabled={initialData !== null}
+          disabled={initialData !== null || isSubmitting}
           className={errors.category ? "input-error" : ""}
         >
           {categories.map((cat) => (
@@ -95,6 +102,7 @@ const BudgetForm = ({
           step="0.01"
           min="0"
           className={errors.monthlyLimit ? "input-error" : ""}
+          disabled={isSubmitting}
         />
         {errors.monthlyLimit && (
           <span className="error-message">{errors.monthlyLimit}</span>
@@ -102,11 +110,24 @@ const BudgetForm = ({
       </div>
 
       <div className="form-actions">
-        <button type="button" className="btn btn-secondary" onClick={onCancel}>
+        <button 
+          type="button" 
+          className="btn btn-secondary" 
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
           Cancel
         </button>
-        <button type="submit" className="btn btn-primary">
-          {initialData ? "Update Budget" : "Add Budget"}
+        <button 
+          type="submit" 
+          className="btn btn-primary form-submit-btn"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <span className="btn-spinner"></span>
+          ) : (
+            initialData ? "Update Budget" : "Add Budget"
+          )}
         </button>
       </div>
     </form>

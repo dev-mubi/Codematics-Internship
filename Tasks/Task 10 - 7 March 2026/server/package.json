@@ -1,7 +1,7 @@
 {
-  "name": "finance-dashboard-server",
+  "name": "onyx-wealth-server",
   "version": "1.0.0",
-  "description": "Backend server for Personal Finance Dashboard",
+  "description": "Backend server for Onyx Wealth",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
