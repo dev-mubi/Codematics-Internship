@@ -1,0 +1,236 @@
+/* =========================================
+   Container
+========================================= */
+.transaction-list {
+  background-color: transparent;
+}
+
+/* =========================================
+   Desktop — Table View
+========================================= */
+.transaction-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+}
+
+.transaction-table thead th {
+  padding: 0 20px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.transaction-row {
+  background-color: var(--bg-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .transaction-row {
+  background: var(--bg-secondary);
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.transaction-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.transaction-table td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+.transaction-table td:last-child  { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+
+.transaction-table td {
+  padding: 16px 20px;
+  color: var(--text-primary);
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.transaction-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.transaction-notes {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.amount-cell {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 15px;
+  text-align: right;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* =========================================
+   Action Buttons
+========================================= */
+.action-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .action-btn {
+  background: var(--bg-tertiary);
+}
+
+.action-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+  transform: scale(1.05);
+}
+
+.delete-btn:hover {
+  color: #ef4444;
+  border-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* =========================================
+   Mobile — Premium Card View
+========================================= */
+.transaction-cards {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .transaction-table {
+    display: none;
+  }
+
+  .transaction-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .transaction-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+  }
+
+  [data-theme="dark"] .transaction-card {
+    background: var(--bg-secondary);
+    box-shadow: none;
+  }
+
+  .tc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .tc-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .tc-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  .tc-notes {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .tc-amount {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .tc-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .tc-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tc-date {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .tc-actions {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+/* =========================================
+   States
+========================================= */
+.transaction-list__loading,
+.transaction-list__empty {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+  border-radius: 16px;
+  border: 1px dashed var(--border-color);
+}
+
+[data-theme="dark"] .transaction-list__loading,
+[data-theme="dark"] .transaction-list__empty {
+  background: var(--bg-secondary);
+}

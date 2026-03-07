@@ -1,0 +1,39 @@
+.chart-container {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.chart-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+}
+
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    padding: 16px;
+  }
+}
+
+/* Recharts Pie Chart overrides for Onyx Wealth theme consistency */
+.recharts-pie-label-text {
+  fill: var(--text-primary) !important;
+  font-size: 13px !important;
+  font-weight: 500;
+}
+
+.recharts-pie-label-line {
+  stroke: var(--border-color) !important;
+}

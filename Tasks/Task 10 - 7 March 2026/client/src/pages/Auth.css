@@ -1,0 +1,536 @@
+/* Base Resets */
+.auth-master-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+  overflow: hidden;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* =========================================
+   Showcase Panel (Left on Desktop)
+   - Stays dark regardless of theme for premium feel
+========================================= */
+.auth-showcase {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem;
+  overflow: hidden;
+  background: #0a0a0b; 
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.auth-showcase-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Branding */
+.brand-logo-large {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  animation: fadeDown 1s ease-out;
+}
+
+.logo-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.brand-logo-large h1 {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Typography & Quotes */
+.quote-container {
+  position: relative;
+  height: 200px;
+  margin-top: 4rem;
+}
+
+.quote-block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 500px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.quote-block.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.quote-text {
+  font-size: 32px;
+  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+  margin-bottom: 24px;
+}
+
+.quote-author {
+  font-size: 16px;
+  color: #8b8b93;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.showcase-footer p {
+  color: #52525b;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  animation: fadeUp 1s ease-out 0.5s both;
+}
+
+/* Ambient Animated Gradients */
+.ambient-bg {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 1;
+  opacity: 0.5;
+  animation: float 20s infinite ease-in-out alternate;
+}
+
+.ambient-bg.shape-1 {
+  width: 400px;
+  height: 400px;
+  background: rgba(147, 197, 253, 0.05);
+  top: -100px;
+  left: -100px;
+}
+
+.ambient-bg.shape-2 {
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.03);
+  bottom: -200px;
+  right: -100px;
+  animation-delay: -10s;
+}
+
+/* =========================================
+   Form Panel (Right on Desktop)
+========================================= */
+.auth-form-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary);
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+  z-index: 10;
+  position: relative;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-container {
+  position: absolute;
+  top: 2rem;
+  right: 2.5rem;
+  animation: fadeDown 0.6s ease-out;
+  z-index: 50;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--bg-tertiary);
+  transform: rotate(15deg);
+}
+
+.mobile-brand {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 3rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.5px;
+}
+
+.auth-header {
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.6s ease-out;
+}
+
+.auth-header h2 {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.auth-header .subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.error-banner {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444; 
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  animation: fadeDown 0.3s ease-out;
+}
+
+.success-banner {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  animation: fadeDown 0.3s ease-out;
+}
+
+/* Form Styles */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeUp 0.6s ease-out both;
+}
+
+.input-group:nth-child(1) { animation-delay: 0.1s; }
+.input-group:nth-child(2) { animation-delay: 0.15s; }
+.input-group:nth-child(3) { animation-delay: 0.2s; }
+.input-group:nth-child(4) { animation-delay: 0.25s; }
+
+.input-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0 16px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.input-wrapper:focus-within {
+  background: var(--bg-primary);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.input-wrapper.has-error {
+  border-color: #ef4444;
+}
+
+.input-icon {
+  color: var(--text-secondary);
+  min-width: 18px;
+  transition: color 0.2s;
+}
+
+.input-wrapper:focus-within .input-icon {
+  color: var(--text-primary);
+}
+
+.input-wrapper input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 14px 12px;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+}
+
+/* Fix browser autofill background in dark mode */
+.input-wrapper input:-webkit-autofill,
+.input-wrapper input:-webkit-autofill:hover,
+.input-wrapper input:-webkit-autofill:focus,
+.input-wrapper input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-secondary) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+[data-theme="dark"] .input-wrapper input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-secondary) inset !important;
+}
+
+.input-wrapper input::placeholder {
+  color: #9ca3af; 
+}
+
+/* Add specialized dark theme override for placeholders if needed */
+[data-theme="dark"] .input-wrapper input::placeholder {
+  color: #52525b;
+}
+
+.field-error {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+/* Submit Button */
+.submit-btn {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  animation: fadeUp 0.6s ease-out 0.3s both;
+}
+
+.submit-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .submit-btn:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.submit-btn:disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.auth-footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  animation: fadeUp 0.6s ease-out 0.4s both;
+}
+
+.toggle-mode-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: inherit;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+
+.toggle-mode-btn:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* =========================================
+   Mobile Quotes
+========================================= */
+.mobile-quotes {
+  display: none;
+  position: relative;
+  margin-top: 3rem;
+  height: 80px; 
+  text-align: center;
+  animation: fadeUp 1s ease-out 0.6s both;
+}
+
+.mobile-quote-block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 1s ease-in-out;
+  pointer-events: none;
+}
+
+.mobile-quote-block.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-quotes p {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.mobile-quotes span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   Animations
+========================================= */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-30px) scale(1.1); }
+}
+
+/* =========================================
+   Responsive Design
+========================================= */
+@media (max-width: 900px) {
+  .auth-showcase {
+    display: none; /* Hide large dark panel */
+  }
+  
+  .mobile-brand {
+    display: flex;
+    animation: fadeDown 0.6s ease-out;
+  }
+  
+  .mobile-quotes {
+    display: block; /* Show quotes beneath form */
+  }
+  
+  /* Relocate theme button on mobile so it doesn't overlap container padding */
+  .theme-toggle-container {
+    top: 1rem;
+    right: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-form-wrapper {
+    padding: 1.5rem;
+  }
+  .auth-header h2 {
+    font-size: 28px;
+  }
+}
+
+/* =========================================
+   OTP Verification Styles
+========================================= */
+.otp-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+
+.otp-input-wrapper {
+  justify-content: center;
+}
+
+.otp-input {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  width: 100%;
+  padding-right: 0.5rem;
+  color: var(--text-primary);
+}
+
