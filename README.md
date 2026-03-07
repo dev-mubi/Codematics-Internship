@@ -45,7 +45,8 @@ Each task is placed in its own folder and includes a separate README file explai
 - **Task 09**: Library Management System (Full-Stack)  
   Focused on building a full-stack library management application with a pure HTML, CSS (Tailwind via CDN), and Vanilla JavaScript frontend, powered by a Node.js, Express, and MongoDB backend. Features include secure JWT authentication, responsive layouts, data persistence for books, members, and issues, as well as a high contrast minimal monochrome UI in both light and dark modes.
 
-More tasks will be added as the internship progresses.
+- **Task 10**: Onyx Wealth – Personal Finance Dashboard (Full-Stack, Deployed)  
+  A production-ready, full-stack personal finance management application built with React.js on the frontend and Node.js/Express on the backend, connected to a MongoDB Atlas cloud database. Authentication is handled entirely through Supabase using Email and 8-digit OTP verification with JWT session management. The application allows users to track financial transactions, set and monitor monthly category budgets, and visualize spending patterns through interactive Recharts visualizations. The frontend is deployed on Vercel with analytics instrumented, and the backend API is hosted on Railway. The UI features a fully custom dual-theme (dark/light) design system, premium loading state animations, toast notifications, undo-redo transaction support, CSV export functionality, and custom confirmation modals replacing all native browser dialogs.
 
 ---
 
@@ -54,9 +55,13 @@ More tasks will be added as the internship progresses.
 - HTML5
 - CSS3
 - Tailwind CSS
-- JavaScript
+- JavaScript (Vanilla and React.js)
+- Node.js & Express.js
+- MongoDB (Mongoose)
+- Supabase (Authentication)
 - VS Code
 - Git & GitHub
+- Vercel & Railway (Deployment)
 
 ---
 

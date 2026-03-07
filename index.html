@@ -207,6 +207,15 @@
                 path: "Tasks/Task 09 - 23 February 2026/task9/frontend/index.html",
                 cat: "Full-Stack",
               },
+              {
+                id: "11",
+                taskNumber: "10",
+                title: "Onyx Wealth",
+                date: "07 Mar",
+                path: "https://onyx-wealth.vercel.app",
+                cat: "Full-Stack · Deployed",
+                external: true,
+              },
             ];
           </script>
           <div id="taskGrid" class="contents"></div>
@@ -335,6 +344,11 @@
       });
 
       function enterWorkstation(task) {
+        if (task.external) {
+          window.open(task.path, "_blank");
+          return;
+        }
+
         document.getElementById("gridView").classList.add("hidden");
         document.getElementById("taskView").classList.remove("hidden");
 
