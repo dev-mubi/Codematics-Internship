@@ -1,4 +1,11 @@
 const Transaction = require("../models/Transaction");
+const {
+  parseUTCDate,
+  getUTCMonthStartForYearMonth,
+  getUTCMonthEndForYearMonth,
+  getUTCMonthString,
+  getUTCDayEnd,
+} = require("../utils/dateUtils");
 
 // Get all transactions with filtering
 exports.getTransactions = async (req, res) => {
@@ -13,15 +20,24 @@ exports.getTransactions = async (req, res) => {
 
     if (startDate || endDate) {
       query.date = {};
+      // Parse dates as UTC - they come from frontend as ISO date strings (YYYY-MM-DD)
       if (startDate) {
-        query.date.$gte = new Date(startDate);
+        // Ensure we treat this as UTC midnight
+        query.date.$gte = parseUTCDate(startDate);
       }
       if (endDate) {
-        query.date.$lte = new Date(endDate);
+        // For end date, include the entire day by going to 23:59:59.999 UTC
+        const parsedEndDate = parseUTCDate(endDate);
+        // Set to end of day in UTC
+        parsedEndDate.setUTCHours(23, 59, 59, 999);
+        query.date.$lte = parsedEndDate;
       }
     }
 
-    const transactions = await Transaction.find(query).sort({ date: -1, createdAt: -1 });
+    const transactions = await Transaction.find(query).sort({
+      date: -1,
+      createdAt: -1,
+    });
     res.json(transactions);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -52,12 +68,23 @@ exports.createTransaction = async (req, res) => {
       .json({ message: "Please provide title, amount, and category" });
   }
 
+  // UTC-safe date creation
+  // If date provided, parse as UTC. Otherwise use current UTC time.
+  const transactionDate = date ? parseUTCDate(date) : new Date();
+
+  // Future date check (in UTC)
+  if (transactionDate > getUTCDayEnd()) {
+    return res
+      .status(400)
+      .json({ message: "Cannot create transactions for future dates" });
+  }
+
   const transaction = new Transaction({
     userId,
     title,
     amount,
     category,
-    date: date ? new Date(date) : new Date(),
+    date: transactionDate,
     notes,
   });
 
@@ -80,7 +107,17 @@ exports.updateTransaction = async (req, res) => {
     if (req.body.title) transaction.title = req.body.title;
     if (req.body.amount) transaction.amount = req.body.amount;
     if (req.body.category) transaction.category = req.body.category;
-    if (req.body.date) transaction.date = new Date(req.body.date);
+    // UTC-safe date parsing
+    if (req.body.date) {
+      const updatedDate = parseUTCDate(req.body.date);
+      // Future date check (in UTC)
+      if (updatedDate > getUTCDayEnd()) {
+        return res
+          .status(400)
+          .json({ message: "Cannot update transaction to a future date" });
+      }
+      transaction.date = updatedDate;
+    }
     if (req.body.notes !== undefined) transaction.notes = req.body.notes;
 
     const updatedTransaction = await transaction.save();
@@ -117,13 +154,14 @@ exports.getStats = async (req, res) => {
     let query = { userId };
 
     if (month && year) {
-      const startDate = new Date(
-        `${year}-${String(month).padStart(2, "0")}-01`
+      // Use UTC-safe month boundary calculation
+      const startDate = getUTCMonthStartForYearMonth(
+        parseInt(year),
+        parseInt(month)
       );
-      const endDate = new Date(
-        startDate.getFullYear(),
-        startDate.getMonth() + 1,
-        0
+      const endDate = getUTCMonthEndForYearMonth(
+        parseInt(year),
+        parseInt(month)
       );
       query.date = { $gte: startDate, $lte: endDate };
     }

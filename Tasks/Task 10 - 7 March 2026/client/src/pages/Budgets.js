@@ -5,9 +5,7 @@ import Modal from "../components/Modal";
 import PremiumLoader from "../components/PremiumLoader";
 import BudgetForm from "../components/BudgetForm";
 import BudgetCard from "../components/BudgetCard";
-import BudgetComparison from "../components/BudgetComparison";
-import MonthlySpendings from "../components/MonthlySpendings";
-import CategoryDistribution from "../components/CategoryDistribution";
+import BudgetAnalytics from "../components/BudgetAnalytics";
 import { useTheme } from "../hooks/useTheme";
 import * as api from "../utils/api";
 import { useToast } from "../hooks/useToast";
@@ -26,7 +24,9 @@ const Budgets = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [categoryBreakdown, setCategoryBreakdown] = useState({});
-  const [chartData, setChartData] = useState([]);
+  const [velocityData, setVelocityData] = useState([]);
+  const [varianceData, setVarianceData] = useState([]);
+  const [totals, setTotals] = useState({ budget: 0, spent: 0 });
   const toast = useToast();
 
   const categories = [
@@ -44,17 +44,18 @@ const Budgets = () => {
     if (showLoader) setIsLoading(true);
     try {
       const now = new Date();
-      const currentMonth = `${now.getFullYear()}-${String(
-        now.getMonth() + 1
-      ).padStart(2, "0")}`;
+      // Use UTC methods for proper date calculation
+      const year = now.getUTCFullYear();
+      const month = now.getUTCMonth();
+      const currentMonth = `${year}-${String(month + 1).padStart(2, "0")}`;
 
       // Fetch budgets
       const budgetsResponse = await api.getBudgets();
       setBudgets(budgetsResponse.data);
 
-      // Fetch transactions for current month
-      const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      // Fetch transactions for current month using UTC
+      const startDate = new Date(Date.UTC(year, month, 1));
+      const endDate = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999));
       const transactionsResponse = await api.getTransactions({
         startDate: startDate.toISOString().split("T")[0],
         endDate: endDate.toISOString().split("T")[0],
@@ -76,14 +77,47 @@ const Budgets = () => {
 
       setCategoryBreakdown(breakdown);
 
-      // Prepare chart data
-      const comparisonData = budgetsResponse.data.map((budget) => ({
-        category: budget.category,
-        budget: budget.monthlyLimit,
-        actual: breakdown[budget.category] || 0,
-      }));
+      // --- ADVANCED ANALYTICS CALCULATIONS ---
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const totalBudgetLimit = budgetsResponse.data.reduce((acc, b) => acc + b.monthlyLimit, 0);
+      const dailyIdeal = totalBudgetLimit / daysInMonth;
+      const today = new Date().getUTCDate();
 
-      setChartData(comparisonData);
+      // 1. Calculate Velocity Data (Cumulative)
+      const velocity = [];
+      let cumulativeActual = 0;
+      const spendingByDay = {};
+      let maxDayWithData = today;
+      
+      transactionsResponse.data.forEach(t => {
+        const d = new Date(t.date).getUTCDate();
+        spendingByDay[d] = (spendingByDay[d] || 0) + t.amount;
+        if (d > maxDayWithData) maxDayWithData = d;
+      });
+
+      for (let i = 1; i <= daysInMonth; i++) {
+        cumulativeActual += (spendingByDay[i] || 0);
+        velocity.push({
+          day: i,
+          actual: i <= maxDayWithData ? cumulativeActual : null,
+          ideal: Math.round(dailyIdeal * i)
+        });
+      }
+      setVelocityData(velocity);
+
+      // 2. Calculate Variance Data
+      const variance = budgetsResponse.data.map(b => ({
+        category: getCategoryLabel(b.category),
+        budget: b.monthlyLimit,
+        actual: breakdown[b.category] || 0
+      }));
+      setVarianceData(variance);
+
+      // 3. Totals
+      setTotals({
+        budget: totalBudgetLimit,
+        spent: Object.values(breakdown).reduce((a, b) => a + b, 0)
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
       toast.error("Error fetching data. Please check server connection.");
@@ -150,12 +184,22 @@ const Budgets = () => {
   }, [isDark]);
 
   // Prepare data for category distribution chart
-  const categoryChartData = categories
+  // First get all categories with spending
+  const categoriesWithSpending = categories
     .filter((cat) => categoryBreakdown[cat] > 0)
     .map((cat) => ({
       category: cat,
       amount: categoryBreakdown[cat],
     }));
+
+  // Display categories with spending, or show all categories if none have spending
+  const displayCategoryData =
+    categoriesWithSpending.length > 0
+      ? categoriesWithSpending
+      : categories.map((cat) => ({
+          category: cat,
+          amount: 0,
+        }));
 
   return (
     <div className="budgets">
@@ -176,39 +220,64 @@ const Budgets = () => {
           <PremiumLoader message="Loading your budgets..." />
         ) : (
           <>
-            {/* Budget Cards Grid */}
-            <div className="budgets__grid">
-              {budgets.length === 0 ? (
-                <div className="empty-state">
-                  <p>No budgets set yet. Create one to get started!</p>
-                </div>
-              ) : (
-            budgets.map((budget) => (
-              <BudgetCard
-                key={budget._id}
-                category={budget.category}
-                budget={budget}
-                spent={categoryBreakdown[budget.category] || 0}
-                onEdit={(cat) => setEditingCategory(cat)}
-                onDelete={handleDeleteBudget}
-              />
-            ))
-          )}
-        </div>
+            {/* High-level Summary Cards */}
+            <div className="budgets__summary-row">
+              <div className="summary-card">
+                <span className="summary-card__label">Total Budget</span>
+                <span className="summary-card__value primary">{formatCurrency(totals.budget)}</span>
+              </div>
+              <div className="summary-card">
+                <span className="summary-card__label">Total Spent</span>
+                <span className={`summary-card__value ${totals.spent > totals.budget ? 'danger' : ''}`}>
+                  {formatCurrency(totals.spent)}
+                </span>
+              </div>
+              <div className="summary-card">
+                <span className="summary-card__label">Utilization</span>
+                <span className="summary-card__value">
+                  {totals.budget > 0 ? Math.round((totals.spent / totals.budget) * 100) : 0}%
+                </span>
+              </div>
+              <div className="summary-card">
+                <span className="summary-card__label">Remaining</span>
+                <span className="summary-card__value success">
+                  {formatCurrency(Math.max(totals.budget - totals.spent, 0))}
+                </span>
+              </div>
+            </div>
 
-        {/* Charts */}
-        <div className="charts-section">
-          <h2 className="section-title">Analytics</h2>
-          <div className="charts-grid">
-            <div className="chart-container">
-              <BudgetComparison data={chartData} />
+            {/* Advanced Analytics */}
+            <div className="budgets__analytics-container">
+               <h2 className="section-title">Budget Insights</h2>
+               <BudgetAnalytics 
+                 velocityData={velocityData} 
+                 varianceData={varianceData} 
+               />
             </div>
-            <div className="chart-container">
-              <CategoryDistribution data={categoryChartData} />
+
+            {/* Budget Cards Grid */}
+            <div className="budgets__management">
+              <h2 className="section-title">Budget Management</h2>
+              <div className="budgets__grid">
+                {budgets.length === 0 ? (
+                  <div className="empty-state">
+                    <p>No budgets set yet. Create one to get started!</p>
+                  </div>
+                ) : (
+                  budgets.map((budget) => (
+                    <BudgetCard
+                      key={budget._id}
+                      category={budget.category}
+                      budget={budget}
+                      spent={categoryBreakdown[budget.category] || 0}
+                      onEdit={(cat) => setEditingCategory(cat)}
+                      onDelete={handleDeleteBudget}
+                    />
+                  ))
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-        </>
+          </>
         )}
       </div>
 

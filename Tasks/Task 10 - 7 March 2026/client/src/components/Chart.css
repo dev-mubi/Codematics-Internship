@@ -1,15 +1,33 @@
 .chart-container {
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 24px;
+  animation: fadeUp 0.6s ease-out 0.25s both;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .chart-container {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.chart-container:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .chart-container:hover {
+  box-shadow: 0 12px 24px rgba(255, 255, 255, 0.04);
 }
 
 .chart-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0 0 16px 0;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.3px;
 }
 
 .chart-empty {
@@ -19,11 +37,16 @@
   height: 300px;
   color: var(--text-secondary);
   font-size: 14px;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
   .chart-container {
     padding: 16px;
+  }
+
+  .chart-title {
+    font-size: 16px;
   }
 }
 
@@ -35,5 +58,97 @@
 }
 
 .recharts-pie-label-line {
+  stroke: var(--border-color) !important;
+}
+
+/* Recharts Tooltip Theme Override */
+.recharts-default-tooltip {
+  outline: none !important;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+/* Dark mode tooltip styling */
+[data-theme="dark"] .recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+[data-theme="dark"] .recharts-surface {
+  background-color: transparent !important;
+}
+
+[data-theme="dark"] .recharts-default-tooltip {
+  background-color: rgba(45, 45, 45, 0.98) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6) !important;
+  padding: 12px 16px !important;
+}
+
+[data-theme="dark"] .recharts-tooltip-label {
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-weight: 600 !important;
+  margin-bottom: 4px !important;
+}
+
+[data-theme="dark"] .recharts-tooltip-item {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 13px !important;
+}
+
+/* Light mode tooltip styling */
+.recharts-default-tooltip {
+  background-color: rgba(255, 255, 255, 0.99) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12) !important;
+  padding: 12px 16px !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  margin-bottom: 4px !important;
+}
+
+.recharts-tooltip-item {
+  color: var(--text-secondary) !important;
+  font-size: 13px !important;
+}
+
+/* Recharts Legend theming */
+.recharts-legend-wrapper {
+  padding-top: 20px !important;
+}
+
+[data-theme="dark"] .recharts-legend-item-text {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 12px !important;
+}
+
+.recharts-legend-item-text {
+  color: var(--text-primary) !important;
+  font-size: 12px !important;
+}
+
+/* Chart axes styling - Dark mode */
+[data-theme="dark"] .recharts-cartesian-axis-tick-value {
+  fill: rgba(176, 176, 176, 0.8) !important;
+  font-size: 12px !important;
+}
+
+[data-theme="dark"] .recharts-cartesian-axis-line {
+  stroke: rgba(68, 68, 68, 0.6) !important;
+}
+
+/* Chart axes styling - Light mode */
+.recharts-cartesian-axis-tick-value {
+  fill: var(--text-secondary) !important;
+  font-size: 12px !important;
+}
+
+.recharts-cartesian-axis-line {
   stroke: var(--border-color) !important;
 }

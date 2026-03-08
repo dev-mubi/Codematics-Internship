@@ -1,0 +1,141 @@
+/* Financial Overview - Professional Metrics Display */
+
+.financial-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 0 2px; /* Prevent overflow issues with borders */
+}
+
+.metric-card {
+  padding: 20px;
+  border: 1px solid var(--border-color, #e5e5e5);
+  border-radius: 4px;
+  background: var(--bg-primary, #ffffff);
+  transition: all 0.2s ease;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.metric-card:hover {
+  border-color: var(--text-primary, #111);
+  background: var(--text-primary, #111);
+}
+
+.metric-card:hover .metric-label,
+.metric-card:hover .metric-value,
+.metric-card:hover .metric-subtext,
+.metric-card:hover .metric-change.change-neutral {
+  color: #ffffff !important;
+}
+
+.metric-card:hover .metric-change.change-up {
+  color: #10b981 !important; /* Brighter green on dark hover */
+}
+
+.metric-card:hover .metric-change.change-down {
+  color: #ef4444 !important; /* Brighter red on dark hover */
+}
+
+.metric-label {
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-secondary, #666);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.metric-value {
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a1a);
+  letter-spacing: -0.5px;
+}
+
+.metric-subtext {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text-secondary, #666);
+  margin-top: 4px;
+}
+
+.metric-change {
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 600;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-change.change-up {
+  color: #059669;
+}
+
+.metric-change.change-down {
+  color: #dc2626;
+}
+
+.metric-change.change-neutral {
+  color: var(--text-secondary, #666);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .financial-overview {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .financial-overview {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .metric-card {
+    padding: 16px;
+    min-height: 100px;
+  }
+
+  .metric-value {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .financial-overview {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .metric-card {
+    padding: 14px;
+    min-height: 90px;
+  }
+}
+
+/* Dark mode overrides using data-theme */
+[data-theme="dark"] .metric-card {
+  background: var(--bg-secondary, #2d2d2d);
+  border-color: var(--border-color, #444);
+}
+
+[data-theme="dark"] .metric-card:hover {
+  background: var(--text-primary, #ffffff);
+  border-color: var(--text-primary, #ffffff);
+}
+
+[data-theme="dark"] .metric-card:hover .metric-label,
+[data-theme="dark"] .metric-card:hover .metric-value,
+[data-theme="dark"] .metric-card:hover .metric-subtext,
+[data-theme="dark"] .metric-card:hover .metric-change.change-neutral {
+  color: #111111 !important;
+}

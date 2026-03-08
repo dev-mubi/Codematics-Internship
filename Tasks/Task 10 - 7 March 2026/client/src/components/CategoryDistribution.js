@@ -34,48 +34,50 @@ const CategoryDistribution = ({ data = [] }) => {
   );
 
   return (
-    <div className="chart-container">
+    <div className="chart-content">
       <h3 className="chart-title">Category Distribution</h3>
       {chartData.length === 0 ? (
         <div className="chart-empty">No data available yet</div>
       ) : (
-        <ResponsiveContainer width="100%" height={300}>
-          <RechartsPieChart margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              labelLine={!isMobile}
-              label={
-                isMobile
-                  ? false
-                  : ({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`
-              }
-              outerRadius={isMobile ? "70%" : "60%"}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {colors.map((color, index) => (
-                <Cell key={`cell-${index}`} fill={color} />
-              ))}
-            </Pie>
-            <Tooltip
-              formatter={(value) => formatCurrency(value)}
-              contentStyle={{
-                backgroundColor: "var(--bg-secondary)",
-                border: "1px solid var(--border-color)",
-                borderRadius: "4px",
-                color: "var(--text-primary)",
-              }}
-            />
-            <Legend 
-              verticalAlign="bottom" 
-              align="center"
-              iconType="circle"
-              wrapperStyle={{ paddingTop: "20px" }}
-            />
-          </RechartsPieChart>
-        </ResponsiveContainer>
+        <div className="chart-wrapper">
+          <ResponsiveContainer width="100%" height="100%">
+            <RechartsPieChart margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                labelLine={!isMobile}
+                label={
+                  isMobile
+                    ? false
+                    : ({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`
+                }
+                outerRadius={isMobile ? "70%" : "60%"}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {colors.map((color, index) => (
+                  <Cell key={`cell-${index}`} fill={color} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value) => formatCurrency(value)}
+                contentStyle={{
+                  backgroundColor: "var(--bg-secondary)",
+                  border: "1px solid var(--border-color)",
+                  borderRadius: "4px",
+                  color: "var(--text-primary)",
+                }}
+              />
+              <Legend 
+                verticalAlign="bottom" 
+                align="center"
+                iconType="circle"
+                wrapperStyle={{ paddingTop: "20px" }}
+              />
+            </RechartsPieChart>
+          </ResponsiveContainer>
+        </div>
       )}
     </div>
   );

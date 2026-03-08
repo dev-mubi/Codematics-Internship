@@ -8,6 +8,10 @@ const TransactionList = ({
   onEdit,
   onDelete,
   isLoading = false,
+  totalTransactions = 0,
+  currentPage = 1,
+  totalPages = 1,
+  onPageChange,
 }) => {
   if (isLoading) {
     return (
@@ -47,7 +51,9 @@ const TransactionList = ({
                 {t.notes && <div className="transaction-notes">{t.notes}</div>}
               </td>
               <td>
-                <span className="category-badge">{getCategoryLabel(t.category)}</span>
+                <span className="category-badge">
+                  {getCategoryLabel(t.category)}
+                </span>
               </td>
               <td className="amount-cell">{formatCurrency(t.amount)}</td>
               <td>
@@ -88,10 +94,12 @@ const TransactionList = ({
               </div>
               <span className="tc-amount">{formatCurrency(t.amount)}</span>
             </div>
-            
+
             <div className="tc-footer">
               <div className="tc-meta">
-                <span className="category-badge">{getCategoryLabel(t.category)}</span>
+                <span className="category-badge">
+                  {getCategoryLabel(t.category)}
+                </span>
                 <span className="tc-date">{formatDate(t.date)}</span>
               </div>
               <div className="tc-actions">
@@ -118,6 +126,29 @@ const TransactionList = ({
           </div>
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {totalTransactions > transactions.length && (
+        <div className="pagination-controls">
+          <button
+            className="pagination-btn"
+            disabled={currentPage === 1}
+            onClick={() => onPageChange(currentPage - 1)}
+          >
+            Previous
+          </button>
+          <span className="pagination-info">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            className="pagination-btn"
+            disabled={currentPage === totalPages}
+            onClick={() => onPageChange(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

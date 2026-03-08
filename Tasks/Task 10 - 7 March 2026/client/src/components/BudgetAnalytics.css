@@ -1,0 +1,57 @@
+.budget-analytics {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.analytics-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.analytics-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.analytics-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.chart-container {
+  width: 100%;
+}
+
+/* Custom Tooltip styling */
+.recharts-default-tooltip {
+  border: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+}
+
+@media (max-width: 1024px) {
+  .budget-analytics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-section {
+    padding: 16px;
+  }
+  
+  .analytics-title {
+    font-size: 14px;
+  }
+  
+  .analytics-subtitle {
+    font-size: 11px;
+  }
+}

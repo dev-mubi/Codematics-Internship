@@ -1,0 +1,282 @@
+/* ============================================
+   Financial Insights Panel Styling
+============================================ */
+
+.financial-insights {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  animation: fadeUp 0.6s ease-out 0.3s both;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .financial-insights {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.financial-insights:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .financial-insights:hover {
+  box-shadow: 0 12px 24px rgba(255, 255, 255, 0.04);
+}
+
+/* ============================================
+   Header
+============================================ */
+
+.insights-header {
+  margin-bottom: 24px;
+}
+
+.insights-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  letter-spacing: -0.3px;
+}
+
+.insights-description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ============================================
+   Insights Container
+============================================ */
+
+.insights-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* ============================================
+   Individual Insight Items
+============================================ */
+
+.insight-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: insightSlideIn 0.5s ease-out forwards;
+}
+
+@keyframes insightSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.insight-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+  border-color: var(--accent-color);
+}
+
+[data-theme="dark"] .insight-item:hover {
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.04);
+}
+
+/* Type variants */
+
+.insight-item--category {
+  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.insight-item--category .insight-icon {
+  color: #3b82f6;
+}
+
+.insight-item--average {
+  border-color: rgba(168, 85, 247, 0.2);
+  background: rgba(168, 85, 247, 0.05);
+}
+
+.insight-item--average .insight-icon {
+  color: #a855f7;
+}
+
+.insight-item--activity {
+  border-color: rgba(34, 197, 94, 0.2);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.insight-item--activity .insight-icon {
+  color: #22c55e;
+}
+
+.insight-item--alert {
+  border-color: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.insight-item--alert .insight-icon {
+  color: #ef4444;
+}
+
+.insight-item--info {
+  border-color: rgba(79, 70, 229, 0.2);
+  background: rgba(79, 70, 229, 0.05);
+}
+
+.insight-item--info .insight-icon {
+  color: #4f46e5;
+}
+
+/* ============================================
+   Icon Wrapper
+============================================ */
+
+.insight-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  transition: all 0.3s ease;
+}
+
+.insight-item:hover .insight-icon-wrapper {
+  transform: scale(1.1);
+}
+
+.insight-icon {
+  width: 18px;
+  height: 18px;
+  transition: all 0.3s ease;
+}
+
+/* ============================================
+   Message Text
+============================================ */
+
+.insight-message {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  font-weight: 500;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   Responsive Design
+============================================ */
+
+@media (max-width: 1024px) {
+  .financial-insights {
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .insights-title {
+    font-size: 16px;
+  }
+
+  .insights-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .insight-item {
+    padding: 14px;
+  }
+
+  .insight-message {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .financial-insights {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .insights-header {
+    margin-bottom: 16px;
+  }
+
+  .insights-title {
+    font-size: 14px;
+  }
+
+  .insights-description {
+    font-size: 11px;
+  }
+
+  .insights-container {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .insight-item {
+    padding: 12px;
+  }
+
+  .insight-icon-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .insight-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .insight-message {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .financial-insights {
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+
+  .insight-item {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .insight-icon-wrapper {
+    width: 28px;
+    height: 28px;
+  }
+
+  .insight-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .insight-message {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+}

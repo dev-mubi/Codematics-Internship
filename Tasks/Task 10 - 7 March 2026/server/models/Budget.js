@@ -28,11 +28,12 @@ const budgetSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: () => {
+        // Use UTC methods to generate month string
+        // This ensures consistency with transaction dates which are stored in UTC
         const now = new Date();
-        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
-          2,
-          "0"
-        )}`;
+        const year = now.getUTCFullYear();
+        const month = String(now.getUTCMonth() + 1).padStart(2, "0");
+        return `${year}-${month}`;
       },
     },
   },

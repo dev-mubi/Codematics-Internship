@@ -49,7 +49,16 @@ const TransactionForm = ({
     if (!formData.amount || formData.amount <= 0)
       newErrors.amount = "Amount must be greater than 0";
     if (!formData.category) newErrors.category = "Category is required";
-    if (!formData.date) newErrors.date = "Date is required";
+    if (!formData.date) {
+      newErrors.date = "Date is required";
+    } else {
+      const selectedDate = new Date(formData.date);
+      const today = new Date();
+      today.setHours(23, 59, 59, 999);
+      if (selectedDate > today) {
+        newErrors.date = "Future dates are not allowed";
+      }
+    }
     return newErrors;
   };
 
@@ -139,6 +148,7 @@ const TransactionForm = ({
           name="date"
           value={formData.date}
           onChange={handleChange}
+          max={new Date().toISOString().split("T")[0]}
           className={errors.date ? "input-error" : ""}
           disabled={isSubmitting}
         />

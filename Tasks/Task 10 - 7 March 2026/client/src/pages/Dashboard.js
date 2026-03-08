@@ -1,37 +1,36 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Download, RotateCcw, Activity, DollarSign, Search, Filter, Plus } from "lucide-react";
 import Header from "../components/Header";
+import { Plus, Download, Undo2, Redo2 } from "lucide-react";
 import Modal from "../components/Modal";
 import PremiumLoader from "../components/PremiumLoader";
 import TransactionForm from "../components/TransactionForm";
 import TransactionList from "../components/TransactionList";
+import FinancialOverview from "../components/FinancialOverview";
+import SpendingTrendChart from "../components/SpendingTrendChart";
+import CategoryAnalysis from "../components/CategoryAnalysis";
 import { useTheme } from "../hooks/useTheme";
 import { useCommandHistory } from "../hooks/useUndoRedo";
-import { useDebounce } from "../hooks/useDebounce";
+import useDebounce from "../hooks/useDebounce";
 import * as api from "../utils/api";
 import { useToast } from "../hooks/useToast";
-import {
-  formatDate,
-  formatCurrency,
-  formatMonthYear,
-} from "../utils/helpers";
+import { formatDate } from "../utils/helpers";
 import "./Dashboard.css";
 
 const Dashboard = () => {
   const { isDark, toggleTheme } = useTheme();
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [paginatedTransactions, setPaginatedTransactions] = useState([]);
+  const [previousTransactions, setPreviousTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("current-month");
-  const [stats, setStats] = useState({
-    totalExpenses: 0,
-    categoryBreakdown: {},
-    totalTransactions: 0,
-  });
+  const [budgets, setBudgets] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const transactionsPerPage = 20;
 
   const { push, undo, redo, canUndo, canRedo } = useCommandHistory();
   const toast = useToast();
@@ -48,10 +47,22 @@ const Dashboard = () => {
 
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-  const refreshStats = useCallback(async (filters = {}) => {
-    const statsResponse = await api.getTransactionStats(filters);
-    setStats(statsResponse.data);
-  }, []);
+  // Calculate statistics from transactions
+  const calculateStats = (txns) => {
+    if (!txns || txns.length === 0) {
+      return {
+        totalExpenses: 0,
+        totalTransactions: 0,
+        averageTransaction: 0,
+      };
+    }
+    const total = txns.reduce((sum, t) => sum + t.amount, 0);
+    return {
+      totalExpenses: total,
+      totalTransactions: txns.length,
+      averageTransaction: total / txns.length,
+    };
+  };
 
   // Fetch transactions
   const fetchTransactions = useCallback(async () => {
@@ -61,14 +72,32 @@ const Dashboard = () => {
       let filters = {};
 
       if (dateFilter === "current-month") {
-        const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-        const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        // Calculate month boundaries using UTC
+        // Important: Use getUTC* methods to avoid local timezone issues
+        const year = now.getUTCFullYear();
+        const month = now.getUTCMonth(); // 0-11
+
+        // First day of month at 00:00:00 UTC
+        const startDate = new Date(Date.UTC(year, month, 1));
+        // Last day of month at 23:59:59.999 UTC
+        const endDate = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999));
+
         filters.startDate = startDate.toISOString().split("T")[0];
         filters.endDate = endDate.toISOString().split("T")[0];
       } else if (dateFilter === "last-3-months") {
-        const startDate = new Date(now.getFullYear(), now.getMonth() - 2, 1);
+        // Calculate 3-month range using UTC
+        const year = now.getUTCFullYear();
+        const month = now.getUTCMonth(); // 0-11
+
+        // Start: 3 months ago on the 1st at 00:00:00 UTC
+        const startDate = new Date(Date.UTC(year, month - 2, 1));
+        // End: today at 23:59:59.999 UTC
+        const endDate = new Date(
+          Date.UTC(year, month, now.getUTCDate(), 23, 59, 59, 999)
+        );
+
         filters.startDate = startDate.toISOString().split("T")[0];
-        filters.endDate = now.toISOString().split("T")[0];
+        filters.endDate = endDate.toISOString().split("T")[0];
       }
 
       if (categoryFilter) {
@@ -79,36 +108,86 @@ const Dashboard = () => {
       const data = Array.isArray(response.data) ? response.data : [];
       setTransactions(data);
 
-      await refreshStats(filters);
+      // Fetch previous period for trend calculation
+      if (dateFilter === "current-month") {
+        const year = now.getUTCFullYear();
+        const month = now.getUTCMonth(); // 0-11
+
+        // Previous month start and end
+        const prevStartDate = new Date(Date.UTC(year, month - 1, 1));
+        const prevEndDate = new Date(Date.UTC(year, month, 0, 23, 59, 59, 999));
+
+        const prevResponse = await api.getTransactions({
+          startDate: prevStartDate.toISOString().split("T")[0],
+          endDate: prevEndDate.toISOString().split("T")[0],
+        });
+        setPreviousTransactions(
+          Array.isArray(prevResponse.data) ? prevResponse.data : []
+        );
+      }
     } catch (error) {
       console.error("Error fetching transactions:", error);
-      toast.error("Error fetching transactions. Please check server connection.");
+      toast.error(
+        "Error fetching transactions. Please check server connection."
+      );
     } finally {
       setIsLoading(false);
     }
-  }, [dateFilter, categoryFilter, refreshStats]);
+  }, [dateFilter, categoryFilter]);
 
-  // Filter transactions based on search query
+  // Fetch budgets
+  const fetchBudgets = useCallback(async () => {
+    try {
+      const response = await api.getBudgets?.();
+      if (response?.data) {
+        setBudgets(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching budgets:", error);
+    }
+  }, []);
+
+  // Filter transactions based on search query and implement pagination
   useEffect(() => {
+    let filtered = transactions;
+
     if (debouncedSearchQuery) {
       const query = debouncedSearchQuery.toLowerCase();
-      setFilteredTransactions(
-        transactions.filter(
-          (t) =>
-            t.title.toLowerCase().includes(query) ||
-            t.category.toLowerCase().includes(query) ||
-            (t.notes && t.notes.toLowerCase().includes(query))
-        )
+      filtered = transactions.filter(
+        (t) =>
+          t.title.toLowerCase().includes(query) ||
+          t.category.toLowerCase().includes(query) ||
+          (t.notes && t.notes.toLowerCase().includes(query))
       );
-    } else {
-      setFilteredTransactions(transactions);
     }
+
+    setFilteredTransactions(filtered);
+    // Reset to page 1 when filters change
+    setCurrentPage(1);
+
+    // Paginate the filtered results (20 per page)
+    const startIndex = 0;
+    const endIndex = transactionsPerPage;
+    setPaginatedTransactions(filtered.slice(startIndex, endIndex));
   }, [transactions, debouncedSearchQuery]);
+
+  // Handle pagination
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * transactionsPerPage;
+    const endIndex = startIndex + transactionsPerPage;
+    setPaginatedTransactions(filteredTransactions.slice(startIndex, endIndex));
+  }, [currentPage, filteredTransactions]);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(
+    filteredTransactions.length / transactionsPerPage
+  );
 
   // Fetch on mount and when filters change
   useEffect(() => {
     fetchTransactions();
-  }, [fetchTransactions]);
+    fetchBudgets();
+  }, [fetchTransactions, fetchBudgets]);
 
   useEffect(() => {
     if (isDark) {
@@ -118,21 +197,14 @@ const Dashboard = () => {
     }
   }, [isDark]);
 
-  // -------------------------------------------------------
-  // Add transaction — with undo (deletes it) / redo (re-creates)
-  // -------------------------------------------------------
+  // Add transaction with undo/redo
   const handleAddTransaction = async (data) => {
     try {
       const response = await api.createTransaction(data);
       const created = response.data;
-      let currentId = created._id; // Mutable ID tracker for the closure
+      let currentId = created._id;
 
       setTransactions((prev) => [created, ...prev]);
-      setStats((prev) => ({
-        ...prev,
-        totalExpenses: prev.totalExpenses + created.amount,
-        totalTransactions: prev.totalTransactions + 1,
-      }));
       setShowAddModal(false);
       toast.success("Transaction added successfully!");
 
@@ -141,22 +213,12 @@ const Dashboard = () => {
         undo: async () => {
           await api.deleteTransaction(currentId);
           setTransactions((prev) => prev.filter((t) => t._id !== currentId));
-          setStats((prev) => ({
-            ...prev,
-            totalExpenses: prev.totalExpenses - created.amount,
-            totalTransactions: prev.totalTransactions - 1,
-          }));
         },
         redo: async () => {
           const res = await api.createTransaction(data);
           const recreated = res.data;
-          currentId = recreated._id; // Update ID for next Undo
+          currentId = recreated._id;
           setTransactions((prev) => [recreated, ...prev]);
-          setStats((prev) => ({
-            ...prev,
-            totalExpenses: prev.totalExpenses + recreated.amount,
-            totalTransactions: prev.totalTransactions + 1,
-          }));
         },
       });
     } catch (error) {
@@ -165,9 +227,7 @@ const Dashboard = () => {
     }
   };
 
-  // -------------------------------------------------------
-  // Update transaction — undo restores original, redo re-applies new
-  // -------------------------------------------------------
+  // Update transaction with undo/redo
   const handleUpdateTransaction = async (data) => {
     try {
       const original = editingTransaction;
@@ -177,10 +237,6 @@ const Dashboard = () => {
       setTransactions((prev) =>
         prev.map((t) => (t._id === original._id ? updated : t))
       );
-      setStats((prev) => ({
-        ...prev,
-        totalExpenses: prev.totalExpenses - original.amount + updated.amount,
-      }));
       setEditingTransaction(null);
       toast.success("Transaction updated successfully!");
 
@@ -198,10 +254,6 @@ const Dashboard = () => {
           setTransactions((prev) =>
             prev.map((t) => (t._id === original._id ? restored : t))
           );
-          setStats((prev) => ({
-            ...prev,
-            totalExpenses: prev.totalExpenses - updated.amount + original.amount,
-          }));
         },
         redo: async () => {
           const res = await api.updateTransaction(original._id, data);
@@ -209,10 +261,6 @@ const Dashboard = () => {
           setTransactions((prev) =>
             prev.map((t) => (t._id === original._id ? reapplied : t))
           );
-          setStats((prev) => ({
-            ...prev,
-            totalExpenses: prev.totalExpenses - original.amount + reapplied.amount,
-          }));
         },
       });
     } catch (error) {
@@ -221,21 +269,14 @@ const Dashboard = () => {
     }
   };
 
-  // -------------------------------------------------------
-  // Delete transaction — undo re-creates it, redo deletes again
-  // -------------------------------------------------------
+  // Delete transaction with undo/redo
   const handleDeleteTransaction = async (id) => {
     try {
       const target = transactions.find((t) => t._id === id);
       await api.deleteTransaction(id);
-      let currentId = id; // Mutable ID tracker for the redo action
+      let currentId = id;
 
       setTransactions((prev) => prev.filter((t) => t._id !== id));
-      setStats((prev) => ({
-        ...prev,
-        totalExpenses: prev.totalExpenses - target.amount,
-        totalTransactions: prev.totalTransactions - 1,
-      }));
       toast.info("Transaction deleted");
 
       push({
@@ -249,22 +290,12 @@ const Dashboard = () => {
             notes: target.notes,
           });
           const recreated = res.data;
-          currentId = recreated._id; // Update ID for next Redo
+          currentId = recreated._id;
           setTransactions((prev) => [recreated, ...prev]);
-          setStats((prev) => ({
-            ...prev,
-            totalExpenses: prev.totalExpenses + recreated.amount,
-            totalTransactions: prev.totalTransactions + 1,
-          }));
         },
         redo: async () => {
           await api.deleteTransaction(currentId);
           setTransactions((prev) => prev.filter((t) => t._id !== currentId));
-          setStats((prev) => ({
-            ...prev,
-            totalExpenses: prev.totalExpenses - target.amount,
-            totalTransactions: prev.totalTransactions - 1,
-          }));
         },
       });
     } catch (error) {
@@ -305,142 +336,176 @@ const Dashboard = () => {
     document.body.removeChild(link);
   };
 
+  const stats = calculateStats(transactions);
+  const previousStats = calculateStats(previousTransactions);
+
   return (
     <div className="dashboard">
-      <Header isDark={isDark} onToggleTheme={toggleTheme} title="Overview" />
+      <Header
+        isDark={isDark}
+        onToggleTheme={toggleTheme}
+        title="Wealth Analysis"
+      />
 
       <div className="dashboard__container">
-        {/* Render Premium Loader overlay when fetching initial data */}
         {isLoading && transactions.length === 0 ? (
           <div className="dashboard-content">
-            <PremiumLoader message="Fetching your financial data..." />
+            <PremiumLoader message="Loading financial analysis..." />
           </div>
         ) : (
           <>
-            {/* Summary Stats */}
-            <div className="summary-stats">
-              <div className="stat-card">
-                <div className="stat-card-header">
-                  <h3 className="stat-label">Total Expenses {formatMonthYear()}</h3>
-                  <div className="stat-icon-wrapper">
-                    <DollarSign size={20} className="stat-icon" />
-                  </div>
-                </div>
-                <p className="stat-value">{formatCurrency(stats.totalExpenses)}</p>
+            {/* Professional Metrics Overview */}
+            <FinancialOverview
+              totalSpending={stats.totalExpenses}
+              transactionCount={stats.totalTransactions}
+              averageTransaction={stats.averageTransaction}
+              previousTotalSpending={previousStats.totalExpenses}
+            />
+
+            {/* Spending Trend Visualization */}
+            <SpendingTrendChart transactions={transactions} />
+
+            {/* Category Analysis */}
+            <CategoryAnalysis transactions={transactions} />
+
+            {/* Control Panel */}
+            <div className="dashboard-controls">
+              <div className="controls-section search-section">
+                <label className="control-label">Search</label>
+                <input
+                  type="text"
+                  placeholder="Search by title, category, or notes..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="control-input search-input"
+                />
               </div>
-              <div className="stat-card">
-                <div className="stat-card-header">
-                  <h3 className="stat-label">Transactions</h3>
-                  <div className="stat-icon-wrapper">
-                    <Activity size={20} className="stat-icon" />
-                  </div>
+
+              <div className="controls-section filter-section">
+                <div className="filter-group">
+                  <label className="control-label">Time Period</label>
+                  <select
+                    value={dateFilter}
+                    onChange={(e) => setDateFilter(e.target.value)}
+                    className="control-select"
+                  >
+                    <option value="current-month">Current Month</option>
+                    <option value="last-3-months">Last 3 Months</option>
+                    <option value="all">All Time</option>
+                  </select>
                 </div>
-                <p className="stat-value">{stats.totalTransactions}</p>
+
+                <div className="filter-group">
+                  <label className="control-label">Category</label>
+                  <select
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    className="control-select"
+                  >
+                    <option value="">All Categories</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="controls-section action-section">
+                <button
+                  className="control-button button-add"
+                  onClick={() => setShowAddModal(true)}
+                >
+                  Add Transaction
+                </button>
+                <button
+                  className="control-button button-export"
+                  onClick={handleExportCSV}
+                >
+                  Export CSV
+                </button>
+                <button
+                  className="control-button button-undo"
+                  onClick={undo}
+                  disabled={!canUndo}
+                  title="Undo last action"
+                >
+                  Undo
+                </button>
+                <button
+                  className="control-button button-redo"
+                  onClick={redo}
+                  disabled={!canRedo}
+                  title="Redo last action"
+                >
+                  Redo
+                </button>
               </div>
             </div>
 
-            {/* Filters and Actions */}
-            <div className="controls">
-              <div className="search-bar">
-            <div className="input-wrapper search-wrapper">
-              <Search size={18} className="input-icon" />
-              <input
-                type="text"
-                placeholder="Search transactions..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="search-input"
+            <div className="transactions-section">
+              <h2 className="section-title">
+                Transactions{" "}
+                {filteredTransactions.length > 0 &&
+                   `(${filteredTransactions.length})`}
+              </h2>
+              <TransactionList
+                transactions={paginatedTransactions}
+                onEdit={(transaction) => setEditingTransaction(transaction)}
+                onDelete={handleDeleteTransaction}
+                isLoading={isLoading}
+                totalTransactions={filteredTransactions.length}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
               />
             </div>
-          </div>
 
-          <div className="filters">
-            <div className="input-wrapper select-wrapper">
-              <Filter size={18} className="input-icon" />
-              <select
-                value={dateFilter}
-                onChange={(e) => setDateFilter(e.target.value)}
-                className="filter-select"
+            {/* Quick Actions Bar */}
+            <div className="quick-actions">
+              <button 
+                className="quick-actions__btn add" 
+                onClick={() => setShowAddModal(true)}
+                title="Add Transaction"
               >
-                <option value="current-month">Current Month</option>
-                <option value="last-3-months">Last 3 Months</option>
-                <option value="all">All Time</option>
-              </select>
-            </div>
-
-            <div className="input-wrapper select-wrapper">
-              <Filter size={18} className="input-icon" />
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="filter-select"
+                <Plus size={20} />
+                <span>Add</span>
+              </button>
+              
+              <div className="quick-actions__divider" />
+              
+              <button 
+                className="quick-actions__btn" 
+                onClick={handleExportCSV}
+                title="Export CSV"
               >
-                <option value="">All Categories</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="action-buttons">
-            <button
-              className="btn btn-primary"
-              onClick={() => setShowAddModal(true)}
-            >
-              <Plus size={16} /> Add Transaction
-            </button>
-            <button
-              className="btn btn-secondary"
-              onClick={handleExportCSV}
-              title="Export as CSV"
-            >
-              <Download size={16} /> Export
-            </button>
-            <div className="history-actions">
-              <button
-                className="btn btn-secondary btn-undo"
+                <Download size={18} />
+              </button>
+              
+              <button 
+                className="quick-actions__btn" 
                 onClick={undo}
                 disabled={!canUndo}
-                title="Undo (Ctrl+Z)"
+                title="Undo"
               >
-                <div className="btn-icon-wrapper">
-                  <RotateCcw size={16} style={{ transform: "rotate(-45deg)" }} />
-                </div>
-                <span>Undo</span>
+                <Undo2 size={18} />
               </button>
-              <button
-                className="btn btn-secondary btn-redo"
+              
+              <button 
+                className="quick-actions__btn" 
                 onClick={redo}
                 disabled={!canRedo}
-                title="Redo (Ctrl+Y)"
+                title="Redo"
               >
-                <div className="btn-icon-wrapper">
-                  <RotateCcw size={16} style={{ transform: "scaleX(-1) rotate(-45deg)" }} />
-                </div>
-                <span>Redo</span>
+                <Redo2 size={18} />
               </button>
             </div>
-          </div>
-        </div>
-
-        {/* Transaction List */}
-        <div className="transactions-section">
-          <h2 className="section-title">Recent Transactions</h2>
-          <TransactionList
-            transactions={filteredTransactions}
-            onEdit={(transaction) => setEditingTransaction(transaction)}
-            onDelete={handleDeleteTransaction}
-            isLoading={isLoading}
-          />
-        </div>
-        </>
+          </>
         )}
       </div>
 
-      {/* Modals */}
+      {/* Add Transaction Modal */}
       <Modal
         isOpen={showAddModal}
         title="Add Transaction"
@@ -453,6 +518,7 @@ const Dashboard = () => {
         />
       </Modal>
 
+      {/* Edit Transaction Modal */}
       <Modal
         isOpen={editingTransaction !== null}
         title="Edit Transaction"
