@@ -18,11 +18,13 @@ The system is architecturally separated into an independent React frontend and a
 ## Application Features
 
 ### Authentication
+
 - User registration via email, verified through an 8-digit One-Time Passcode (OTP) delivered securely by Supabase.
 - Persistent session management using Supabase JWT tokens, which are validated on every API request.
 - Automated session invalidation and redirection to the login screen when a token becomes invalid or expires, handled at the API layer without user disruption.
 
 ### Dashboard
+
 - An overview of total spending, transaction volume, and category breakdowns displayed through summary statistics cards.
 - A filterable, paginated transaction table with support for searching, filtering by category, filtering by date range, and downloading data as a CSV export.
 - Real-time chart visualizations powered by Recharts, providing a graphical breakdown of spending patterns.
@@ -30,12 +32,14 @@ The system is architecturally separated into an independent React frontend and a
 - Undo-redo support for recent transaction actions.
 
 ### Budgets
+
 - Definition of monthly budget limits for any spending category.
 - Visual comparison of actual spending against defined monthly limits through bar charts.
 - Category distribution pie chart illustrating the proportional share of spending across categories.
 - Immediate synchronization of budget modifications across all dependent chart data.
 
 ### User Experience
+
 - Premium fullscreen loading state displayed during initial data retrieval, preventing the display of empty or zero-value statistics.
 - Custom sign-out confirmation modal in place of native browser dialogs.
 - Non-blocking toast notification system for all success, error, and informational feedback.
@@ -173,12 +177,12 @@ The application will open automatically in your browser at `http://localhost:300
 
 The application has been deployed to production and is accessible online.
 
-| Layer    | Platform | Notes                                        |
-|----------|----------|----------------------------------------------|
-| Frontend | Vercel   | Automatic deployments on every commit        |
-| Backend  | Railway  | Always-on server with environment isolation  |
+| Layer    | Platform      | Notes                                        |
+| -------- | ------------- | -------------------------------------------- |
+| Frontend | Vercel        | Automatic deployments on every commit        |
+| Backend  | Railway       | Always-on server with environment isolation  |
 | Database | MongoDB Atlas | Cloud-hosted cluster with persistent storage |
-| Auth     | Supabase | Email OTP and JWT session management         |
+| Auth     | Supabase      | Email OTP and JWT session management         |
 
 The Vercel deployment has Vercel Analytics enabled, providing real-time visibility into traffic and user behaviour directly within the Vercel project dashboard.
 
@@ -186,17 +190,17 @@ The Vercel deployment has Vercel Analytics enabled, providing real-time visibili
 
 ## Technical Stack
 
-| Category        | Technology                           |
-|-----------------|--------------------------------------|
-| Frontend        | React.js (Create React App)          |
-| Styling         | Vanilla CSS, Custom Theme System     |
-| Icons           | Lucide React                         |
-| Charts          | Recharts                             |
-| Analytics       | Vercel Analytics                     |
-| Backend         | Node.js, Express.js                  |
-| Database        | MongoDB (Mongoose ODM)               |
-| Authentication  | Supabase Auth (Email/OTP + JWT)      |
-| HTTP Client     | Axios (with interceptors)            |
+| Category       | Technology                       |
+| -------------- | -------------------------------- |
+| Frontend       | React.js (Create React App)      |
+| Styling        | Vanilla CSS, Custom Theme System |
+| Icons          | Lucide React                     |
+| Charts         | Recharts                         |
+| Analytics      | Vercel Analytics                 |
+| Backend        | Node.js, Express.js              |
+| Database       | MongoDB (Mongoose ODM)           |
+| Authentication | Supabase Auth (Email/OTP + JWT)  |
+| HTTP Client    | Axios (with interceptors)        |
 
 ---
 
