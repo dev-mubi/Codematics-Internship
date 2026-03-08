@@ -15,14 +15,14 @@
    - Stays dark regardless of theme for premium feel
 ========================================= */
 .auth-showcase {
-  flex: 1;
+  flex: 1.1;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 4rem;
+  padding: 3rem 3.5rem;
   overflow: hidden;
-  background: #0a0a0b; 
+  background: #0a0a0b;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -32,7 +32,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 0;
 }
 
 /* Branding */
@@ -102,10 +103,11 @@
 }
 
 .showcase-footer p {
-  color: #52525b;
-  font-size: 14px;
+  color: #3f3f46;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.5px;
+  margin-top: 2rem;
   animation: fadeUp 1s ease-out 0.5s both;
 }
 
@@ -475,32 +477,73 @@
    Responsive Design
 ========================================= */
 @media (max-width: 900px) {
+  /* Stack the whole layout vertically */
+  .auth-master-container {
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+
+  /* Hide desktop split-panel showcase */
   .auth-showcase {
-    display: none; /* Hide large dark panel */
+    display: none;
   }
-  
+
+  /* Hide old mobile-brand (now inside MobileShowcase) */
   .mobile-brand {
-    display: flex;
-    animation: fadeDown 0.6s ease-out;
+    display: none;
   }
-  
+
+  /* Hide old mobile quote rotator (replaced by MobileShowcase) */
   .mobile-quotes {
-    display: block; /* Show quotes beneath form */
+    display: none;
   }
-  
-  /* Relocate theme button on mobile so it doesn't overlap container padding */
+
+  /* Form panel → bottom sheet */
+  .auth-form-panel {
+    flex: 1;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.25);
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .auth-form-wrapper {
+    padding: 2rem 1.75rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Move theme toggle to top-right of form panel */
   .theme-toggle-container {
-    top: 1rem;
-    right: 1.5rem;
+    top: 1.25rem;
+    right: 1.75rem;
+  }
+
+  .auth-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .auth-header h2 {
+    font-size: 26px;
   }
 }
 
-@media (max-width: 480px) {
+/* Extra small devices */
+@media (max-width: 390px) {
   .auth-form-wrapper {
-    padding: 1.5rem;
+    padding: 1.75rem 1.25rem;
   }
+
   .auth-header h2 {
-    font-size: 28px;
+    font-size: 24px;
+  }
+}
+
+/* Tablet — tighten form */
+@media (min-width: 600px) and (max-width: 900px) {
+  .auth-form-wrapper {
+    max-width: 480px;
+    margin: 0 auto;
   }
 }
 

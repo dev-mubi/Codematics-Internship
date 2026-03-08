@@ -2,50 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Mail, Lock, ArrowRight, TrendingUp, Sun, Moon, KeyRound } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 import { supabase } from "../utils/supabase";
+import AuthShowcase from "./AuthShowcase";
+import MobileShowcase from "./MobileShowcase";
 import "./Auth.css";
 
-const QUOTES = [
-  {
-    text: "Wealth is the ability to fully experience life.",
-    author: "Henry David Thoreau",
-  },
-  {
-    text: "Do not save what is left after spending, but spend what is left after saving.",
-    author: "Warren Buffett",
-  },
-  {
-    text: "A budget is telling your money where to go instead of wondering where it went.",
-    author: "Dave Ramsey",
-  },
-  {
-    text: "Beware of little expenses; a small leak will sink a great ship.",
-    author: "Benjamin Franklin",
-  },
-  {
-    text: "Never spend your money before you have it.",
-    author: "Thomas Jefferson",
-  },
-  {
-    text: "If you buy things you do not need, soon you will have to sell things you need.",
-    author: "Warren Buffett",
-  },
-  {
-    text: "A penny saved is a penny earned.",
-    author: "Benjamin Franklin",
-  },
-  {
-    text: "Too many people spend money they earned to buy things they don’t want.",
-    author: "Will Rogers",
-  },
-  {
-    text: "The habit of saving is itself an education.",
-    author: "T. T. Munger",
-  },
-  {
-    text: "Small daily financial habits lead to long-term wealth.",
-    author: "Anonymous",
-  },
-];
+// Number of slides in AuthShowcase (must match SLIDES.length in AuthShowcase.js)
+const SLIDE_COUNT = 4;
 
 // View states: "login" | "signup" | "verify-otp"
 const Auth = ({ onLoginSuccess }) => {
@@ -63,7 +25,7 @@ const Auth = ({ onLoginSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [generalError, setGeneralError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [quoteIndex, setQuoteIndex] = useState(0);
+  const [slideIndex, setSlideIndex] = useState(0);
 
   const { isDark, toggleTheme } = useTheme();
 
@@ -76,10 +38,10 @@ const Auth = ({ onLoginSuccess }) => {
     }
   }, [isDark]);
 
-  // Rotate quotes
+  // Rotate showcase slides
   useEffect(() => {
     const interval = setInterval(() => {
-      setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
+      setSlideIndex((prev) => (prev + 1) % SLIDE_COUNT);
     }, 6000);
     return () => clearInterval(interval);
   }, []);
@@ -204,7 +166,10 @@ const Auth = ({ onLoginSuccess }) => {
 
   return (
     <div className="auth-master-container">
-      {/* Visual Showcase Panel */}
+      {/* Mobile-only product intro carousel (hidden on desktop via CSS) */}
+      <MobileShowcase />
+
+      {/* Desktop Visual Showcase Panel */}
       <div className="auth-showcase">
         <div className="auth-showcase-content">
           <div className="brand-logo-large">
@@ -214,17 +179,11 @@ const Auth = ({ onLoginSuccess }) => {
             <h1>Onyx Wealth</h1>
           </div>
 
-          <div className="quote-container">
-            {QUOTES.map((quote, idx) => (
-              <div
-                key={idx}
-                className={`quote-block ${idx === quoteIndex ? "active" : ""}`}
-              >
-                <p className="quote-text">"{quote.text}"</p>
-                <p className="quote-author">— {quote.author}</p>
-              </div>
-            ))}
-          </div>
+          {/* Dynamic product feature slides */}
+          <AuthShowcase
+            activeSlide={slideIndex}
+            onDotClick={(idx) => setSlideIndex(idx)}
+          />
 
           <div className="showcase-footer">
             <p>Elevating personal finance to an art form.</p>
@@ -248,10 +207,6 @@ const Auth = ({ onLoginSuccess }) => {
             </button>
           </div>
 
-          <div className="mobile-brand">
-            <TrendingUp size={24} strokeWidth={2} />
-            <span>Onyx Wealth</span>
-          </div>
 
           {/* ============ OTP VERIFICATION VIEW ============ */}
           {view === "verify-otp" && (
@@ -440,15 +395,20 @@ const Auth = ({ onLoginSuccess }) => {
                 </p>
               </div>
 
-              {/* Mobile Quotes */}
+              {/* Mobile — compact product taglines */}
               <div className="mobile-quotes">
-                {QUOTES.map((quote, idx) => (
+                {[
+                  { text: "Track every financial move", author: "Transactions & history" },
+                  { text: "Intelligent budget control", author: "Category limits & charts" },
+                  { text: "Rich financial insights",    author: "Monthly trends & export" },
+                  { text: "Secure and always in sync",  author: "OTP-verified accounts" },
+                ].map((item, idx) => (
                   <div
                     key={idx}
-                    className={`mobile-quote-block ${idx === quoteIndex ? "active" : ""}`}
+                    className={`mobile-quote-block ${idx === slideIndex ? "active" : ""}`}
                   >
-                    <p>"{quote.text}"</p>
-                    <span>— {quote.author}</span>
+                    <p>"{item.text}"</p>
+                    <span>— {item.author}</span>
                   </div>
                 ))}
               </div>

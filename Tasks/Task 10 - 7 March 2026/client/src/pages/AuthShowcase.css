@@ -1,0 +1,415 @@
+/* =====================================================
+   AuthShowcase — Living Product Preview Panel
+   Dark-first design. Matches auth-showcase background.
+===================================================== */
+
+/* ── Layout wrapper ─────────────────────────────────────── */
+.showcase-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  flex: 1;
+  justify-content: center;
+}
+
+/* ── Browser-chrome preview window ──────────────────────── */
+.preview-window {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 24px 60px rgba(0, 0, 0, 0.6),
+    0 8px 20px rgba(0, 0, 0, 0.4);
+  animation: windowFadeIn 0.8s ease-out both;
+}
+
+@keyframes windowFadeIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Menu bar chrome */
+.preview-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.window-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.window-dot.red    { background: #ff5f57; }
+.window-dot.yellow { background: #febc2e; }
+.window-dot.green  { background: #28c840; }
+
+.window-title {
+  margin-left: 8px;
+  font-size: 11px;
+  color: #3f3f46;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.preview-content {
+  padding: 16px;
+  min-height: 280px;
+}
+
+/* ── Story card — shared container ──────────────────────── */
+.story-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.story-card.story-enter {
+  animation: storyReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes storyReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.story-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.story-chip {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #a1a1aa;
+}
+
+.story-chip-secondary {
+  font-size: 11px;
+  color: #3f3f46;
+  font-weight: 500;
+}
+
+.story-chip-positive {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4ade80;
+  letter-spacing: 0.3px;
+}
+
+/* ── Story 1: Transaction List ───────────────────────────── */
+.tx-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tx-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
+  opacity: 0;
+  transform: translateX(-6px);
+  animation: txSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes txSlideIn {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.tx-icon-wrap {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tx-initials {
+  font-size: 12px;
+  font-weight: 700;
+  color: #a1a1aa;
+}
+
+.tx-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: 1px;
+}
+
+.tx-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #e4e4e7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tx-cat {
+  font-size: 10px;
+  color: #52525b;
+  font-weight: 400;
+}
+
+.tx-amount {
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.tx-amount.positive { color: #4ade80; }
+.tx-amount.negative { color: #a1a1aa; }
+
+/* ── Story 2: Spend Chart ────────────────────────────────── */
+.chart-summary-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.chart-big-number {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.chart-big-label {
+  font-size: 11px;
+  color: #52525b;
+  margin-top: 3px;
+}
+
+/* ── Story 3: Budget bars ────────────────────────────────── */
+.budget-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.budget-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  opacity: 0;
+  animation: txSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.budget-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.budget-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a1a1aa;
+}
+
+.budget-fraction {
+  font-size: 11px;
+  font-weight: 600;
+  color: #e4e4e7;
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-fraction.over {
+  color: #f87171;
+}
+
+.budget-limit {
+  font-weight: 400;
+  color: #52525b;
+}
+
+.budget-track {
+  height: 5px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.budget-fill {
+  height: 100%;
+  background: rgba(255,255,255,0.7);
+  border-radius: 99px;
+  transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 0%;
+}
+
+.budget-fill-over {
+  background: #f87171;
+}
+
+/* ── Story 4: Overview ───────────────────────────────────── */
+.overview-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.pie-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.pie-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pie-cat-name {
+  font-size: 11.5px;
+  color: #a1a1aa;
+  flex: 1;
+}
+
+.pie-cat-pct {
+  font-size: 11px;
+  font-weight: 600;
+  color: #e4e4e7;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-stats-row {
+  display: flex;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.summary-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.summary-stat-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-stat-label {
+  font-size: 9.5px;
+  color: #52525b;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-stat-trend {
+  font-size: 10px;
+  font-weight: 600;
+  color: #4ade80;
+}
+
+/* ── Story meta (headline + subtext below card) ──────────── */
+.story-meta {
+  animation: metaFadeIn 0.5s ease-out both;
+}
+
+@keyframes metaFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.story-headline {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  color: #e4e4e7;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.story-subtext {
+  font-size: 13.5px;
+  color: #52525b;
+  line-height: 1.55;
+  max-width: 400px;
+  font-weight: 400;
+}
+
+/* ── Progress dots ───────────────────────────────────────── */
+.story-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.story-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-dot.active {
+  background: rgba(255, 255, 255, 0.75);
+  width: 22px;
+  border-radius: 3px;
+}
+
+.story-dot:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Recharts overrides for dark panel ──────────────────── */
+.preview-content .recharts-cartesian-axis-tick-value {
+  fill: #52525b;
+}
+.preview-content .recharts-tooltip-wrapper {
+  outline: none;
+}
