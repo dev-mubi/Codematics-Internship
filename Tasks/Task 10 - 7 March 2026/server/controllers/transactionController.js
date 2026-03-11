@@ -47,7 +47,10 @@ exports.getTransactions = async (req, res) => {
 // Get a single transaction
 exports.getTransaction = async (req, res) => {
   try {
-    const transaction = await Transaction.findById(req.params.id);
+    const transaction = await Transaction.findOne({
+      _id: req.params.id,
+      userId: req.userId,
+    });
     if (!transaction) {
       return res.status(404).json({ message: "Transaction not found" });
     }
@@ -99,7 +102,10 @@ exports.createTransaction = async (req, res) => {
 // Update a transaction
 exports.updateTransaction = async (req, res) => {
   try {
-    const transaction = await Transaction.findById(req.params.id);
+    const transaction = await Transaction.findOne({
+      _id: req.params.id,
+      userId: req.userId,
+    });
     if (!transaction) {
       return res.status(404).json({ message: "Transaction not found" });
     }
