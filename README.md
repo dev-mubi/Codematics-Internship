@@ -48,6 +48,9 @@ Each task is placed in its own folder and includes a separate README file explai
 - **Task 10**: Onyx Wealth – Personal Finance Dashboard (Full-Stack, Deployed)  
   A production-ready, full-stack personal finance management application built with React.js on the frontend and Node.js/Express on the backend, connected to a MongoDB Atlas cloud database. Authentication is handled entirely through Supabase using Email and 8-digit OTP verification with JWT session management. The application allows users to track financial transactions, set and monitor monthly category budgets, and visualize spending patterns through interactive Recharts visualizations. The frontend is deployed on Vercel with analytics instrumented, and the backend API is hosted on Railway. The UI features a fully custom dual-theme (dark/light) design system, premium loading state animations, toast notifications, undo-redo transaction support, CSV export functionality, and custom confirmation modals replacing all native browser dialogs.
 
+- **Task 11**: Cinevia – Cinematic Movie Exploration Platform (Full-Stack, React, Supabase)  
+  A premium movie discovery and organization platform built with React.js and Framer Motion, integrated with the TMDB API for real-time movie metadata and Supabase for secure cloud authentication and user data persistence. The application features a high-end, cinematic UI with a dual-theme design system (Dark/Light). Key implementations include a sophisticated split-screen authentication flow (Login, Signup, OTP) with cinematic brand intros, an immersive "Theater Mode" for mobile trailer viewing, and structured legal pages (Privacy & Terms) with responsive sticky navigation. User profile management is streamlined with an emphasis on infrastructure security, utilizing Supabase Row-Level Security (RLS) and JWT-based session integrity to protect user watchlists and personalization settings.
+
 ---
 
 ## Technologies Used

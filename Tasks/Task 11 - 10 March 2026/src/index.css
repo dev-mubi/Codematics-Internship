@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 255 255 255;
+  --surface: 249 249 251;
+  --border: 234 234 238;
+  --primary: 10 10 15;
+  --muted: 134 134 139;
+  --accent: 230 57 70;
+  --accent-hover: 255 77 90;
+}
+
+.dark {
+  --background: 10 10 15;
+  --surface: 17 17 24;
+  --border: 30 30 42;
+  --primary: 240 240 245;
+  --muted: 107 107 128;
+}
+
+@layer base {
+  body {
+    background-color: rgb(var(--background));
+    color: rgb(var(--primary));
+    @apply font-body;
+  }
+}
+
+@layer components {
+  .cinematic-overlay {
+    background: linear-gradient(to bottom, transparent 0%, rgba(var(--background), 0.8) 70%, rgb(var(--background)) 100%);
+  }
+  
+  .glass-card {
+    background-color: rgba(var(--surface), 0.5);
+    @apply backdrop-blur-md border rounded-xl;
+    border-color: rgba(var(--border), 1);
+  }
+}
+
+/* Custom transitions */
+.transition-card {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Hide scrollbar but allow scrolling */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
