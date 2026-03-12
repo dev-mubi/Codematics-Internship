@@ -199,19 +199,17 @@ const MovieDetail = () => {
         onClose={() => setIsTrailerOpen(false)}
         transparent={true}
       >
-        <div className="flex flex-col h-full md:h-auto">
-          <div className="flex-1 flex items-center justify-center">
-            <div className="w-full aspect-video">
-              <ReactPlayer 
-                url={`https://www.youtube.com/watch?v=${trailer?.key}`}
-                width="100%"
-                height="100%"
-                playing={isTrailerOpen}
-                controls={true}
-              />
-            </div>
+        <div className="flex flex-col">
+          <div className="w-full aspect-video">
+            <ReactPlayer 
+              url={`https://www.youtube.com/watch?v=${trailer?.key}`}
+              width="100%"
+              height="100%"
+              playing={isTrailerOpen}
+              controls={true}
+            />
           </div>
-          <p className="text-[10px] text-muted text-left md:text-center mt-4 md:mt-6 pb-8 md:pb-6 px-6 md:px-8 leading-relaxed opacity-60">
+          <p className="flex-shrink-0 text-[10px] text-muted text-left md:text-center mt-4 md:mt-6 pb-8 md:pb-6 px-6 md:px-8 leading-relaxed opacity-60">
             Trailer content is sourced from YouTube and is governed by YouTube's Terms of Service. 
             Cinevia does not host, own, or control this content. Viewer discretion is advised.
           </p>

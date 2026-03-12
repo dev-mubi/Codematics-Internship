@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Modal = ({ isOpen, onClose, children, title, transparent = false }) => {
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -16,10 +28,10 @@ const Modal = ({ isOpen, onClose, children, title, transparent = false }) => {
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            className={`relative w-full max-w-5xl overflow-hidden shadow-2xl transition-all duration-300 ${
+            className={`relative w-full max-w-4xl shadow-2xl transition-all duration-300 ${
               transparent 
-                ? 'bg-transparent h-full md:h-auto md:bg-surface md:rounded-2xl md:border md:border-white/5' 
-                : 'bg-surface rounded-2xl border border-white/5'
+                ? 'bg-transparent h-fit max-h-screen md:bg-surface md:rounded-2xl md:border md:border-white/10 overflow-hidden' 
+                : 'bg-surface h-auto max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10'
             }`}
             onClick={(e) => e.stopPropagation()}
           >
@@ -42,7 +54,8 @@ const Modal = ({ isOpen, onClose, children, title, transparent = false }) => {
             {!title && (
               <button 
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/80 rounded-full text-white transition-colors"
+                className="absolute top-4 right-4 z-50 p-3 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full text-white transition-all hover:scale-110 active:scale-95 border border-white/10"
+                aria-label="Close modal"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
