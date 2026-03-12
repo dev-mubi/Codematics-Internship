@@ -80,7 +80,7 @@ REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
 cd "Task 11 - 10 March 2026"
 
 # Install dependencies
-npm install
+npm install --legacy-peer-deps
 
 # Start the development server
 npm start
