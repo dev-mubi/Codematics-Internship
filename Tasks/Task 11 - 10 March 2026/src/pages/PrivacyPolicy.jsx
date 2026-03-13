@@ -70,7 +70,7 @@ const PrivacyPolicy = () => {
             <div className="text-accent font-bold tracking-[0.4em] uppercase text-xs mb-4">Legal Framework</div>
             <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 tracking-tight">Privacy Policy</h1>
             <p className="text-xl text-muted font-light leading-relaxed">
-              Transparent data practices for the Cinevia community.<br/> Last updated: March 12, 2025.
+              Transparent data practices for the Cinevia community.<br/> Last updated: March 12, 2026.
             </p>
           </motion.div>
         </div>

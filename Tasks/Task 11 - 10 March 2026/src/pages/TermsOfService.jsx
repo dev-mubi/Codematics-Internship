@@ -57,7 +57,7 @@ const TermsOfService = () => {
             <div className="text-accent font-bold tracking-[0.4em] uppercase text-xs mb-4">Agreement</div>
             <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 tracking-tight">Terms of Service</h1>
             <p className="text-xl text-muted font-light leading-relaxed">
-              Rules and guidelines for interacting with the Cinevia platform.<br/> Last updated: March 12, 2025.
+              Rules and guidelines for interacting with the Cinevia platform.<br/> Last updated: March 12, 2026.
             </p>
           </motion.div>
         </div>
